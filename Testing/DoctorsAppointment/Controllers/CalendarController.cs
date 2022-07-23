@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 
@@ -27,7 +22,8 @@ namespace DoctorsAppointment.Controllers
                     new TimeSchedule(x.Day,
                         x.Appointments.Select(y => new Appointment(y.When, y.PatientId, y.PatientName))))
                 .ToList();
-            var luxmedTimeSchedule = luxMed.TimeSchedules.Select(luxmedTimeSchedule => new Appointment(luxmedTimeSchedule.Key,
+            var luxmedTimeSchedule = luxMed.TimeSchedules.Select(luxmedTimeSchedule => new Appointment(
+                    luxmedTimeSchedule.Key,
                     Guid.Parse(luxmedTimeSchedule.Value.Id), luxmedTimeSchedule.Value.FullName))
                 .GroupBy(x => DateOnly.FromDateTime(x.When),
                     (date, appointment) => new TimeSchedule(date, appointment))
@@ -38,7 +34,10 @@ namespace DoctorsAppointment.Controllers
                     (date, appointment) => new TimeSchedule(date, appointment))
                 .ToList();
 
-            return privateClinicTimeSchedule.Concat(luxmedTimeSchedule).Concat(nfzTimeSchedule).OrderBy(x => x.Day);
+            return privateClinicTimeSchedule.Concat(luxmedTimeSchedule).Concat(nfzTimeSchedule)
+                .GroupBy(x => x.Day,
+                    (date, appointment) => new TimeSchedule(date, appointment.SelectMany(z => z.Appointments)))
+                .OrderBy(x => x.Day);
         }
     }
 
@@ -50,7 +49,7 @@ namespace DoctorsAppointment.Controllers
 
     public class LuxMedResponse
     {
-        public Dictionary<DateTime, LuxMedPatient> TimeSchedules;
+        public Dictionary<DateTime, LuxMedPatient> TimeSchedules { get; set; }
     }
 
     public class LuxMedPatient
