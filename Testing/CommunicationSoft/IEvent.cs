@@ -4,6 +4,11 @@ public interface IEvent
 {
 }
 
+public interface IHandleEvent
+{
+    public Task Handle(IEvent @event);
+}
+
 public class TenantConfigured : IEvent
 {
     public TenantConfigured(Guid tenantId)

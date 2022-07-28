@@ -8,8 +8,3 @@ public interface ISlackClient
 {
     Task<int?> PostMessage(string channel, string message);
 }
-
-
-/*
- * On success does nothing
- */
