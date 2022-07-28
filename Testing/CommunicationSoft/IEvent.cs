@@ -4,9 +4,9 @@ public interface IEvent
 {
 }
 
-public interface IHandleEvent
+public interface IHandleEvent<TEvent> where TEvent : class, IEvent 
 {
-    public Task Handle(IEvent @event);
+    public Task Handle(TEvent @event);
 }
 
 public class TenantConfigured : IEvent
