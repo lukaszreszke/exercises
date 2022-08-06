@@ -24,6 +24,7 @@ public class VenuesTests
             expectedParticipant.Venue.ConfirmationEmail), Times.Once);
         pdfService.Verify(x => x.generatePdf(It.Is(expectedParticipant, new ParticipantComparer())), Times.Once);
         repo.Verify(x => x.AddVenueParticipant(It.Is(expectedParticipant, new ParticipantComparer())), Times.Once);
+        repo.VerifyNoOtherCalls();
     }
     
     [Fact]
@@ -45,6 +46,7 @@ public class VenuesTests
             expectedParticipant.Venue.ConfirmationEmail), Times.Once);
         pdfService.Verify(x => x.generatePdf(It.Is(expectedParticipant, new ParticipantComparer())), Times.Once);
         repo.Verify(x => x.AddVenueParticipant(It.Is(expectedParticipant, new ParticipantComparer())), Times.Once);
+        repo.VerifyNoOtherCalls();
     }
 
     private class ParticipantComparer : IEqualityComparer<VenueParticipant>
