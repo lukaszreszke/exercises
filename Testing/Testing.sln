@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorsAppointment", "DoctorsAppointment\DoctorsAppointment.csproj", "{B67B2E0F-E0ED-4652-901A-6A6D7AFDDD5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorsAppointment.ATDD", "DoctorsAppointment.ATDD\DoctorsAppointment.ATDD.csproj", "{F235C544-E5D7-4276-9038-08F95CF365B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{B67B2E0F-E0ED-4652-901A-6A6D7AFDDD5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B67B2E0F-E0ED-4652-901A-6A6D7AFDDD5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B67B2E0F-E0ED-4652-901A-6A6D7AFDDD5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F235C544-E5D7-4276-9038-08F95CF365B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F235C544-E5D7-4276-9038-08F95CF365B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F235C544-E5D7-4276-9038-08F95CF365B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F235C544-E5D7-4276-9038-08F95CF365B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
