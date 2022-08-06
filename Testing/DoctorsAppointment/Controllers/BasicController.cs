@@ -11,6 +11,13 @@ namespace DoctorsAppointment.Controllers
     [ApiController]
     public class BasicController : ControllerBase
     {
+        private readonly CalendarDbContext _calendarDbContext;
+
+        public BasicController(CalendarDbContext calendarDbContext)
+        {
+            _calendarDbContext = calendarDbContext;
+        }
+        
         // GET: api/Basic
         [HttpGet]
         public IEnumerable<string> Get()
@@ -22,6 +29,8 @@ namespace DoctorsAppointment.Controllers
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
+            _calendarDbContext.Add(new Calendar(){ Name = "test"});
+            _calendarDbContext.SaveChanges();
             return "value";
         }
 

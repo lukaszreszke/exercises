@@ -1,17 +1,15 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
 namespace DoctorsAppointment.ATDD;
 
-public class BasicTest : IClassFixture<WebApplicationFactory<Program>>
+public class BasicTest : IClassFixture<CustomWebApplicationFactory<Program>> //IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public BasicTest(WebApplicationFactory<Program> factory)
+    public BasicTest(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }
@@ -27,23 +25,5 @@ public class BasicTest : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode(); // Status Code 200-299
-    }
-}
-
-public class CustomWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup> where TStartup: class
-{
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.ConfigureServices(services =>
-        {
-            var sp = services.BuildServiceProvider();
-
-            using (var scope = sp.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-
-            }
-        });
     }
 }
