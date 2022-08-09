@@ -59,31 +59,5 @@ namespace RoomBookingApp.Api.Tests
             result.ShouldBeOfType(expectedActionResultType);
             _roomBookingProcessor.Verify(x => x.BookRoom(_request), Times.Exactly(expectedMethodCalls));
         }
-
-        [Fact]
-        public async Task Should_not_allow_overlapping_bookings()
-        {
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            httpContextAccessor.Setup(x => x.HttpContext.User).Returns(new ClaimsPrincipal());
-            var dbContext = new RoomBookingAppDbContext(new DbContextOptionsBuilder<RoomBookingAppDbContext>()
-                .UseInMemoryDatabase("test").Options);
-            dbContext.Rooms.Add(new Room { Name = "Romantica", RoomBookings = new List<RoomBooking>() });
-            dbContext.SaveChanges();
-
-            var controller =
-                new RoomBookingController(new RoomBookingRequestProcessor(new RoomBookingService(dbContext)));
-
-            await controller.BookRoom(new RoomBookingRequest
-            {
-                Date = DateTime.UtcNow.AddDays(1).Date, Email = "example@example.com", FullName = "Jan Kowalski", Id = 1
-            });
-
-            var result = await controller.BookRoom(new RoomBookingRequest
-            {
-                Date = DateTime.UtcNow.AddDays(1).Date, Email = "example@example.com", FullName = "Jan Kowalski", Id = 1
-            });
-
-            result.ShouldBeOfType<BadRequestObjectResult>();
-        }
     }
 }
