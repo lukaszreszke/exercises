@@ -44,7 +44,8 @@ public class AcceptanceTests : IClassFixture<CustomWebApplicationFactory<Startup
                 { Date = tomorrow, Id = 1, Email = "hej@exampl.com", FullName = "Jacek Kowalski" }));
         bookRoomResponse.EnsureSuccessStatusCode();
         
-        var availableRooms = await _httpClient.GetFromJsonAsync<List<Room>>($"RoomBooking/available?date={tomorrow}");
+        var availableRoomsResponse = await _httpClient.GetAsync($"RoomBooking/available?date={DateOnly.FromDateTime(tomorrow)}");
+        var availableRooms = JsonConvert.DeserializeObject<List<Room>>(availableRoomsResponse.Content.ReadAsStringAsync().Result);
         availableRooms.ShouldNotBeEmpty();
         availableRooms.Select(x => x.Id).First().ShouldBe(2);
     }

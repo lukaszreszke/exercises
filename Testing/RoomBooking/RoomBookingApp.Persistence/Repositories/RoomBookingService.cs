@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoomBookingApp.Persistence.Repositories
 {
@@ -20,12 +21,13 @@ namespace RoomBookingApp.Persistence.Repositories
 
         public IEnumerable<Room> GetAvailableRooms(DateTime date)
         {
-            return _context.Rooms.Where(q => !q.RoomBookings.Any(x => x.Date == date)).ToList();
+            var rooms = _context.Rooms.Include(x => x.RoomBookings);
+            return rooms.Where(x => x.RoomBookings.All(rb => rb.Date.Equals(date)));
         }
 
         public Room GetRoom(int id)
         {
-            return _context.Rooms.Include(x => x.RoomBookings).First(q => q.Id == id);
+            return _context.Rooms.Include(x => x.RoomBookings).DefaultIfEmpty().First(q => q.Id == id);
         }
 
         public IEnumerable<Room> GetRooms()
