@@ -59,5 +59,52 @@ namespace RoomBookingApp.Api.Tests
             result.ShouldBeOfType(expectedActionResultType);
             _roomBookingProcessor.Verify(x => x.BookRoom(_request), Times.Exactly(expectedMethodCalls));
         }
+
+        [Fact]
+        public async Task should_return_rooms()
+        {
+            var processor = new Mock<IRoomBookingRequestProcessor>();
+            var rooms = new List<Room>
+                { new Room { Id = 1, Name = "mhm", RoomBookings = null } };
+            processor.Setup(x => x.Rooms()).Returns(rooms);
+            var controller = new RoomBookingController(processor.Object);
+
+            // Act
+            var result = await controller.GetRooms();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var value = Assert.IsType<List<Room>>(okResult.Value);
+            value.ShouldAllBe(x => rooms.Contains(x));
+            value.ShouldBeEquivalentTo(rooms);
+        }
+
+        [Fact]
+        public async Task should_return_only_available_rooms_for_given_date()
+        {
+            var processor = new Mock<IRoomBookingRequestProcessor>();
+            var tomorrow = DateTime.UtcNow.AddDays(1);
+            var rooms = new List<Room>
+            {
+                new() { Id = 1, Name = "mhm", RoomBookings = null },
+                new()
+                {
+                    Id = 2, Name = "aha",
+                    RoomBookings = new List<RoomBooking>
+                        { new() { Date = tomorrow, Email = "user@example.com", RoomId = 2 } }
+                }
+            };
+            processor.Setup(x => x.Rooms()).Returns(rooms);
+            var controller = new RoomBookingController(processor.Object);
+
+            // Act
+            var result = await controller.GetRooms();
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var value = Assert.IsType<List<Room>>(okResult.Value);
+            value.ShouldAllBe(x => rooms.Contains(x));
+            value.ShouldBeEquivalentTo(rooms);
+        }
     }
 }

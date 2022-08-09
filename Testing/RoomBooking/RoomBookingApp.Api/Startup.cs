@@ -43,7 +43,7 @@ namespace RoomBookingApp.Api
 
             services.AddDbContext<RoomBookingAppDbContext>(opt => opt.UseSqlite(conn));
 
-            EnsureDatabaseCreated(conn);
+            // EnsureDatabaseCreated(conn);
 
             services.AddScoped<IRoomBookingService, RoomBookingService>();
             services.AddScoped<IRoomBookingRequestProcessor, RoomBookingRequestProcessor>();
