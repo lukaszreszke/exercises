@@ -87,18 +87,12 @@ namespace RoomBookingApp.Api.Tests
             var rooms = new List<Room>
             {
                 new() { Id = 1, Name = "mhm", RoomBookings = null },
-                new()
-                {
-                    Id = 2, Name = "aha",
-                    RoomBookings = new List<RoomBooking>
-                        { new() { Date = tomorrow, Email = "user@example.com", RoomId = 2 } }
-                }
             };
-            processor.Setup(x => x.Rooms()).Returns(rooms);
+            processor.Setup(x => x.AvailableRooms(tomorrow)).Returns(rooms);
             var controller = new RoomBookingController(processor.Object);
 
             // Act
-            var result = await controller.GetRooms();
+            var result = await controller.GetAvailableRooms(tomorrow);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
