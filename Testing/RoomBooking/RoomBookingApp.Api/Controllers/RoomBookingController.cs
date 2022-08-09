@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RoomBookingApp.Core.DataServices;
 using RoomBookingApp.Core.Models;
 using RoomBookingApp.Core.Processors;
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace RoomBookingApp.Api.Controllers
 {
