@@ -44,7 +44,7 @@ namespace RoomBookingApp.Persistence.Tests
         public void Should_Return_No_Available_Rooms()
         {
             //Arrange
-            var date = DateTime.UtcNow.AddDays(1);
+            var date = DateTime.UtcNow;
 
             var dbOptions = new DbContextOptionsBuilder<RoomBookingAppDbContext>()
                 .UseInMemoryDatabase("NoAvailableRoomTest")
@@ -55,9 +55,9 @@ namespace RoomBookingApp.Persistence.Tests
             context.Add(new Room { Id = 2, Name = "Room 2" });
             context.Add(new Room { Id = 3, Name = "Room 3" });
 
-            context.Add(new RoomBooking { RoomId = 1, Date = date });
-            context.Add(new RoomBooking { RoomId = 2, Date = date });
-            context.Add(new RoomBooking { RoomId = 3, Date = date });
+            context.Add(new RoomBooking { RoomId = 1, Date = date.Date });
+            context.Add(new RoomBooking { RoomId = 2, Date = date.Date });
+            context.Add(new RoomBooking { RoomId = 3, Date = date.Date });
 
             context.SaveChanges();
 
@@ -85,8 +85,8 @@ namespace RoomBookingApp.Persistence.Tests
             context.Add(new Room { Id = 2, Name = "Room 2" });
             context.Add(new Room { Id = 3, Name = "Room 3" });
 
-            context.Add(new RoomBooking { RoomId = 1, Date = date });
-            context.Add(new RoomBooking { RoomId = 2, Date = date.AddDays(-1) });
+            context.Add(new RoomBooking { RoomId = 1, Date = date.Date });
+            context.Add(new RoomBooking { RoomId = 2, Date = date.AddDays(-1).Date });
 
             context.SaveChanges();
 

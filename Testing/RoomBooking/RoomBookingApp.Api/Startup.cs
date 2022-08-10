@@ -14,12 +14,31 @@ using RoomBookingApp.Persistence;
 using RoomBookingApp.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RoomBookingApp.Api
 {
+    public class CustomDateTimeConverter : JsonConverter<DateTime>
+    {
+        private readonly string Format;
+        public CustomDateTimeConverter(string format)
+        {
+            Format = format;
+        }
+        public override void Write(Utf8JsonWriter writer, DateTime date, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(date.ToString(Format));
+        }
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return DateTime.ParseExact(reader.GetString(), Format, null);
+        }
+    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -32,7 +51,11 @@ namespace RoomBookingApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RoomBookingApp.Api", Version = "v1" });
@@ -43,8 +66,6 @@ namespace RoomBookingApp.Api
             conn.Open();
 
             services.AddDbContext<RoomBookingAppDbContext>(opt => opt.UseSqlite(conn));
-
-            // EnsureDatabaseCreated(conn);
 
             services.AddScoped<IRoomBookingService, RoomBookingService>();
             services.AddScoped<IRoomBookingRequestProcessor, RoomBookingRequestProcessor>();
