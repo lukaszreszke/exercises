@@ -7,9 +7,9 @@ namespace BookClassification
         {
             _context = context;
         }
-        public void Classify(int animalId, int categoryId, Rule rule = null)
+        public void Classify(int bookId, int categoryId, Rule rule = null)
         {
-            var book = _context.Books.FirstOrDefault(x => x.Id == animalId);
+            var book = _context.Books.FirstOrDefault(x => x.Id == bookId);
             var category = _context.Categories.FirstOrDefault(x => x.Id == categoryId);
 
             if (book == null)
