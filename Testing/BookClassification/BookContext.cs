@@ -9,7 +9,9 @@ namespace BookClassification
         }
 
         public DbSet<Book> Books { get; set; }
-        public DbSet<BookV2> BooksV2 {get; set;}
+        public DbSet<BookV2> BooksV2 { get; set; }
+        public DbSet<BookV3> BooksV3 { get; set; }
+        public DbSet<BookPrice> BookPrices {get; set;}
         public DbSet<Rule> Rules { get; set; }
         public DbSet<Category> Categories { get; set; }
 
