@@ -9,6 +9,7 @@ namespace BookClassification
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<BookV2> BooksV2 {get; set;}
         public DbSet<Rule> Rules { get; set; }
         public DbSet<Category> Categories { get; set; }
 
@@ -23,6 +24,13 @@ namespace BookClassification
             .HasOne(a => a.Rule)
             .WithMany(x => x.Books)
             .HasForeignKey(x => x.RuleId);
+        }
+
+        public static DbContextOptions<BookContext> DefaultOptions()
+        {
+            return new DbContextOptionsBuilder<BookContext>()
+                .UseInMemoryDatabase(databaseName: "books")
+                .Options;
         }
     }
 }
