@@ -1,10 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookClassification", "BookClassification\BookClassification.csproj", "{D42053A8-DF13-4A60-91AB-E97D01121103}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookClassificationTestProject", "BookClassificationTestProject\BookClassificationTestProject.csproj", "{1CB0448C-B355-4F57-A647-B6572226BE77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D42053A8-DF13-4A60-91AB-E97D01121103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D42053A8-DF13-4A60-91AB-E97D01121103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D42053A8-DF13-4A60-91AB-E97D01121103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D42053A8-DF13-4A60-91AB-E97D01121103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CB0448C-B355-4F57-A647-B6572226BE77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB0448C-B355-4F57-A647-B6572226BE77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB0448C-B355-4F57-A647-B6572226BE77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB0448C-B355-4F57-A647-B6572226BE77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
