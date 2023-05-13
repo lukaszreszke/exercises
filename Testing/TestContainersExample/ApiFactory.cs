@@ -6,11 +6,19 @@ using Testcontainers.PostgreSql;
 using Xunit;
 using DbTemplate;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using Respawn;
+using Npgsql;
 
 namespace TestContainersExample
 {
     public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
+
+        public HttpClient HttpClient { get; private set; } = null!;
+
+        private DbConnection _dbConnection = null!;
+        private Respawner _respawner = null!;
 
         private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
             .WithDatabase("testdb")
@@ -52,11 +60,24 @@ namespace TestContainersExample
                 var dbContext = serviceProvider.GetRequiredService<CustomerContext>();
                 dbContext.Database.EnsureCreated();
             }
+            HttpClient = CreateClient();
+            _dbConnection = new NpgsqlConnection(_dbContainer.GetConnectionString());
+            await _dbConnection.OpenAsync();
+            _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = new[] { "public" },
+            });
         }
 
         public new async Task DisposeAsync()
         {
             await _dbContainer.StopAsync();
+        }
+
+        public async Task ResetDatabaseAsync()
+        {
+            await _respawner.ResetAsync(_dbConnection);
         }
     }
 }

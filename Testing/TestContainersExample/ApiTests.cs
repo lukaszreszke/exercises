@@ -5,20 +5,23 @@ using DbTemplate;
 
 namespace TestContainersExample
 {
-    public class ApiTests : IClassFixture<ApiFactory>
+    [Collection("SharedTestCollection")]
+    public class ApiTests : IAsyncLifetime
     {
         private readonly ApiFactory _factory;
+        private readonly Func<Task> _resetDatabase;
 
         public ApiTests(ApiFactory factory)
         {
             _factory = factory;
+            _resetDatabase = factory.ResetDatabaseAsync;
         }
 
         [Fact]
         public async Task Get_EndpointReturnsSuccessAndCorrectContentType()
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = _factory.HttpClient;
 
             // Act
             var response = await client.GetAsync("/weatherforecast");
@@ -26,6 +29,9 @@ namespace TestContainersExample
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.True(_factory.GetCustomerContext().Customers.ToList().Count == 1);
-        }
+         }
+
+        public Task InitializeAsync() => Task.CompletedTask;
+        public Task DisposeAsync() => _resetDatabase();
     }
 }

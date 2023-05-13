@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="Respawn" Version="6.0.0" />
     <PackageReference Include="Testcontainers" Version="3.1.0" />
     <PackageReference Include="TestContainers.MsSql" Version="3.1.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="3.1.0" />
