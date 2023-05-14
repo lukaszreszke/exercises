@@ -21,7 +21,6 @@ namespace Grades
             {
                 FullName = $"{g.FirstName} {g.LastName}",
                 Course = g.Course,
-                Grade = g.Points / 20.0 // Transformacja z punktów na ocenę
             }));
             allGrades.AddRange(xmlGrades.Select(g => new StudentGrade
             {
