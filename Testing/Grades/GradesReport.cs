@@ -17,9 +17,11 @@ namespace Grades
             var xmlGrades = GetGradesFromXml();
 
             var allGrades = new List<StudentGrade>();
+            var studentNames = await GetStudentNames();
+
             allGrades.AddRange(apiGrades.Select(g => new StudentGrade
             {
-                FullName = $"{g.FirstName} {g.LastName}",
+                FullName = studentNames.First(x => x.Key == g.StudentId).Value,
                 Course = g.Course,
             }));
             allGrades.AddRange(xmlGrades.Select(g => new StudentGrade
@@ -30,6 +32,15 @@ namespace Grades
             }));
 
             return allGrades;
+        }
+
+        private async Task<Dictionary<Guid, string>> GetStudentNames()
+        {
+            using (var client = new HttpClient())
+            {
+                var json = await client.GetStringAsync(ApiUrl);
+                return JsonConvert.DeserializeObject<Dictionary<Guid, string>>(json);
+            }
         }
 
         private async Task<List<ApiStudentGrade>> GetGradesFromApiAsync()
