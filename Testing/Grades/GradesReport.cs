@@ -17,19 +17,9 @@ namespace Grades
             var xmlGrades = GetGradesFromXml();
 
             var allGrades = new List<StudentGrade>();
-            allGrades.AddRange(apiGrades.Select(g => new StudentGrade
-            {
-                FullName = $"{g.FirstName} {g.LastName}",
-                Course = g.Course,
-                Grade = g.Points / 20.0 // Transformacja z punktów na ocenę
-            }));
-            allGrades.AddRange(xmlGrades.Select(g => new StudentGrade
-            {
-                FullName = g.FullName,
-                Course = g.Subject,
-                Grade = ConvertEvaluationToGrade(g.Evaluation) // Transformacja z stringa na ocenę
-            }));
-
+            allGrades.AddRange(new StudentGrade().From(xmlGrades));
+            allGrades.AddRange(new StudentGrade().From(apiGrades));
+            
             return allGrades;
         }
 
