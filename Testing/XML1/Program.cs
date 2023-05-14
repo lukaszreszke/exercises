@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using XML1;
 
 class Program
 {
@@ -59,26 +60,18 @@ class Program
                                 </Appointment>
                             </Calendar>";
 
-        XElement calendar1 = XElement.Parse(source1);
         XElement calendar2 = XElement.Parse(source2);
 
-        XElement transformedCalendar1 = new XElement("Calendar",
-            calendar1.Elements("Event").Select(evt => new XElement("Appointment",
-                new XElement("Patient",
-                    new XElement("Name", evt.Element("Pet").Element("Name").Value),
-                    new XElement("Pet",
-                        new XElement("Name", evt.Element("Pet").Element("Name").Value),
-                        new XElement("Type", evt.Element("Pet").Element("Type").Value),
-                        new XElement("Age", evt.Element("Pet").Element("Age").Value)
-                    )
-                ),
-                new XElement("DateTime", $"{evt.Element("Date").Value} {evt.Element("Time").Value}"),
-                new XElement("Description", evt.Element("Title").Value)
-            ))
-        );
-
-        XElement mergedCalendar = new XElement("Calendar", transformedCalendar1.Elements(), calendar2.Elements());
+        XElement mergedCalendar = new Merge().Perform(source1, calendar2); 
 
         Console.WriteLine(mergedCalendar.ToString());
+    }
+}
+
+public class Merge
+{
+    public XElement Perform(string source1, XElement source2)
+    {
+        return new XElement("Calendar", new Mapper().Map(source1).Elements(), source2.Elements());
     }
 }
