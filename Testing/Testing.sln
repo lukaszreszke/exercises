@@ -1,10 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryTDD", "InventoryTDD\InventoryTDD.csproj", "{E3F3F81D-87FD-4BEB-BECD-B1962DD004E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3F3F81D-87FD-4BEB-BECD-B1962DD004E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3F3F81D-87FD-4BEB-BECD-B1962DD004E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3F3F81D-87FD-4BEB-BECD-B1962DD004E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3F3F81D-87FD-4BEB-BECD-B1962DD004E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2042A18-1F78-4833-8DC9-551CD48EF3AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2042A18-1F78-4833-8DC9-551CD48EF3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2042A18-1F78-4833-8DC9-551CD48EF3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2042A18-1F78-4833-8DC9-551CD48EF3AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
