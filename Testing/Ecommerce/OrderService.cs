@@ -34,37 +34,9 @@ public class OrderService
             throw new ArgumentException("Order not found", nameof(orderId));
         }
 
-        if (order.Status != OrderStatus.Draft)
-        {
-            throw new InvalidOperationException("Order must be in Draft status to place the order");
-        }
-
-        if (order.Items.Count == 0)
-        {
-            throw new InvalidOperationException("Order must have at least one item");
-        }
-
         var userId = userService.GetUserName();
-        if (!_isAdminOrder && order.CustomerId != userId)
-        {
-            throw new InvalidOperationException("Order can only be placed by the same customer or an administrator");
-        }
-
-        Money totalValue = Money.Zero;
-        foreach (var item in order.Items)
-        {
-            Money itemValue = item.Price * item.Quantity;
-            totalValue += itemValue;
-        }
-
-        if (order.IsVipCustomer)
-        {
-            Money discount = totalValue * 0.1m;
-            totalValue -= discount;
-        }
-
-        order.TotalValue = totalValue;
-        order.Status = OrderStatus.Placed;
+        CanPlaceOrder(order.CustomerId, userId, _isAdminOrder);
+        order.Place();
 
         _dbContext.SaveChanges();
 
@@ -76,6 +48,14 @@ public class OrderService
     private bool IsAdminOrder()
     {
         return userService.IsAdministrator();
+    }
+
+    private void CanPlaceOrder(string customerId, string userId, bool isAdminOrder)
+    {
+        if (!isAdminOrder && customerId != userId)
+        {
+            throw new InvalidOperationException("Order can only be placed by the same customer or an administrator");
+        }
     }
 }
 
@@ -220,6 +200,44 @@ public class Order
     public Money TotalValue { get; set; }
     public bool IsVipCustomer { get; set; }
     public List<OrderItem> Items { get; set; }
+
+    public void ValidatePlacingOrder()
+    {
+        if (this.Status != OrderStatus.Draft)
+        {
+            throw new InvalidOperationException("Order must be in Draft status to place the order");
+        }
+
+        if (this.Items.Count == 0)
+        {
+            throw new InvalidOperationException("Order must have at least one item");
+        }
+    }
+
+    public void CalculateOrder()
+    {
+        Money totalValue = Money.Zero;
+        foreach (var item in this.Items)
+        {
+            Money itemValue = item.Price * item.Quantity;
+            totalValue += itemValue;
+        }
+
+        if (this.IsVipCustomer)
+        {
+            Money discount = totalValue * 0.1m;
+            totalValue -= discount;
+        }
+
+        this.TotalValue = totalValue;
+    }
+
+    public void Place()
+    {
+        this.ValidatePlacingOrder();
+        this.CalculateOrder();
+        this.Status = OrderStatus.Placed;
+    }
 }
 
 public enum OrderStatus
