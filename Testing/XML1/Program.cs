@@ -80,9 +80,3 @@ class Program
         Console.WriteLine(mergedCalendar.ToString());
     }
 }
-
-// TODO: 
-// Rozwiązać. Dwa parsery -> dane wejściowe na wyjściowe to będzie jedna klasa
-// Potem klasa która merguje wszystkie inputy do jednego wyniku
-// na to osobne testy
-// i jedna klasa do pobierania
