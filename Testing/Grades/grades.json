@@ -1,0 +1,20 @@
+[
+    {
+        "FirstName": "John",
+        "LastName": "Doe",
+        "Course": "Mathematics",
+        "Points": 850
+    },
+    {
+        "FirstName": "Jane",
+        "LastName": "Doe",
+        "Course": "Physics",
+        "Points": 900
+    },
+    {
+        "FirstName": "Bob",
+        "LastName": "Smith",
+        "Course": "Chemistry",
+        "Points": 750
+    }
+]

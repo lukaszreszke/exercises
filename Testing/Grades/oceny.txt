@@ -1,0 +1,2 @@
+W przypadku danych z JSON, ocena jest wyrażona jako punkty z zakresu 0-1000.
+Dla danych z pliku XML, ocena jest wyrażona jako litera (np. "A", "B+", "C").
