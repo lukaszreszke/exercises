@@ -201,6 +201,15 @@ public class Order
     public bool IsVipCustomer { get; set; }
     public List<OrderItem> Items { get; set; }
 
+
+    public void AddItem(OrderItem item)
+    {
+        if (Status == OrderStatus.Draft)
+        {
+            Items.Add(item);
+        }
+    }
+
     public void ValidatePlacingOrder()
     {
         if (this.Status != OrderStatus.Draft)
