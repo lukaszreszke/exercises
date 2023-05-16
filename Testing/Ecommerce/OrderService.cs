@@ -11,15 +11,18 @@ using Microsoft.AspNetCore.Http;
 public class OrderService
 {
     private readonly EcommerceDbContext _dbContext;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private IUserService userService;
     private readonly bool _isAdminOrder;
+    private IMailService mailService;
+    private IPublishService publishService;
 
-    public OrderService(EcommerceDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+    public OrderService(EcommerceDbContext dbContext, IPublishService publishService, IMailService mailService, IUserService userService)
     {
         _dbContext = dbContext;
-        _httpContextAccessor = httpContextAccessor;
-
         _isAdminOrder = IsAdminOrder();
+        this.publishService = publishService;
+        this.mailService = mailService;
+        this.userService = userService;
     }
 
     public void PlaceOrder(int orderId)
@@ -41,7 +44,7 @@ public class OrderService
             throw new InvalidOperationException("Order must have at least one item");
         }
 
-        var userId = _httpContextAccessor.HttpContext.User.Identity.Name;
+        var userId = userService.GetUserName();
         if (!_isAdminOrder && order.CustomerId != userId)
         {
             throw new InvalidOperationException("Order can only be placed by the same customer or an administrator");
@@ -65,16 +68,14 @@ public class OrderService
 
         _dbContext.SaveChanges();
 
-        var mailService = new MailService();
         mailService.SendOrderConfirmation(order);
 
-        MessageBus.Publish(new OrderPlacedMessage(order.OrderId));
+        publishService.Publish(new OrderPlacedMessage(order.OrderId));
     }
 
     private bool IsAdminOrder()
     {
-        var user = _httpContextAccessor.HttpContext.User;
-        return user.IsInRole("Administrator");
+        return userService.IsAdministrator();
     }
 }
 
