@@ -40,7 +40,7 @@ public class UnitTest
     public void Publish_WithChapterHavingLessThanTenWords_ThrowsException()
     {
         var document = DocumentMother.CreateBasicDocument();
-        document.Chapters[0].WithContent("Few words");
+        document.Chapters[0].WithContent("Few words", "Bla");
 
         Assert.Throws<ChapterContentMustContainAtLeastTenWordsException>(() => document.Publish());
     }

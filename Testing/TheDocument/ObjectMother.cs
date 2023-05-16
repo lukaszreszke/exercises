@@ -29,9 +29,10 @@ public static class ChapterExtensions
         return chapter;
     }
 
-    public static Chapter WithContent(this Chapter chapter, string content)
+    public static Chapter WithContent(this Chapter chapter, string content, string title)
     {
-        chapter.Content = content;
+        if (chapter.Content == null) chapter.Content = new List<Section>();
+        chapter.Content.Add(new Section { Content = content, Title = title});
         return chapter;
     }
 }
@@ -49,7 +50,7 @@ public static class DocumentMother
         for (int i = 0; i < 3; i++)
         {
             var chapter = new Chapter().WithTitle($"Chapter {i + 1}")
-                .WithContent("This is a content of a chapter with more than ten words.");
+                .WithContent("This is a content of a chapter with more than ten words.", "Test");
             document.AddChapter(chapter);
         }
 

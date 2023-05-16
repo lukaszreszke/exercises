@@ -20,9 +20,9 @@ public class Document
         {
             if (string.IsNullOrEmpty(chapter.Title))
                 throw new ChapterTitleMustBeProvidedException();
-            if (string.IsNullOrEmpty(chapter.Content))
+            if (chapter.Content.Any(x => string.IsNullOrEmpty(x.Content)))
                 throw new ChapterContentMustBeProvidedException();
-            if (chapter.Content.Split(' ').Length < 10)
+            if (chapter.Content.Any(x => x.Content.Split(' ').Length < 10))
                 throw new ChapterContentMustContainAtLeastTenWordsException();
         }
 
@@ -57,7 +57,7 @@ public class TitleMustBeProvidedException : Exception
 public class Chapter
 {
     public string Title { get; set; }
-    public string Content { get; set; }
+    public List<Section> Content { get; set; }
 }
 
 public class Section
