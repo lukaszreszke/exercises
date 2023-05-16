@@ -3,36 +3,44 @@ namespace TheDocument;
 public class UnitTest
 {
     [Fact]
+    public void Publish_WithEmptyAuthor_ThrowsException()
+    {
+        var document = DocumentMother.CreateBasicDocument().WithAuthor("");
+
+        Assert.Throws<AuthorMustBeProvidedException>(() => document.Publish());
+    }
+
+    [Fact]
+    public void Publish_WithEmptyTitle_ThrowsException()
+    {
+        var document = DocumentMother.CreateBasicDocument().WithTitle("");
+
+        Assert.Throws<TitleMustBeProvidedException>(() => document.Publish());
+    }
+
+    [Fact]
     public void Publish_WithLessThanThreeChapters_ThrowsException()
     {
-        var document = new Document
-        {
-            Author = "Author",
-            Title = "Title",
-            Chapters = new List<Chapter>
-            {
-                new Chapter { Title = "Chapter 1", Content = "Some content here" },
-                new Chapter { Title = "Chapter 2", Content = "Some other content here" }
-            }
-        };
+        var document = DocumentMother.CreateBasicDocument();
+        document.Chapters.RemoveAt(2);
 
         Assert.Throws<AtLeastThreeChaptersMustBeProvidedException>(() => document.Publish());
     }
 
     [Fact]
+    public void Publish_WithChapterHavingEmptyTitle_ThrowsException()
+    {
+        var document = DocumentMother.CreateBasicDocument();
+        document.Chapters[0].WithTitle("");
+
+        Assert.Throws<ChapterTitleMustBeProvidedException>(() => document.Publish());
+    }
+
+    [Fact]
     public void Publish_WithChapterHavingLessThanTenWords_ThrowsException()
     {
-        var document = new Document
-        {
-            Author = "Author",
-            Title = "Title",
-            Chapters = new List<Chapter>
-            {
-                new Chapter { Title = "Chapter 1", Content = "Few words" },
-                new Chapter { Title = "Chapter 2", Content = "Some other content here" },
-                new Chapter { Title = "Chapter 3", Content = "Additional content here" }
-            }
-        };
+        var document = DocumentMother.CreateBasicDocument();
+        document.Chapters[0].WithContent("Few words");
 
         Assert.Throws<ChapterContentMustContainAtLeastTenWordsException>(() => document.Publish());
     }
@@ -40,21 +48,10 @@ public class UnitTest
     [Fact]
     public void Publish_WithValidDocument_SetsIsPublishedToTrue()
     {
-        var document = new Document
-        {
-            Author = "Author",
-            Title = "Title",
-            Chapters = new List<Chapter>
-            {
-                new Chapter { Title = "Chapter 1", Content = "Some content here with more than ten words" },
-                new Chapter { Title = "Chapter 2", Content = "Some other content here with more than ten words" },
-                new Chapter { Title = "Chapter 3", Content = "Additional content here with more than ten words" }
-            }
-        };
+        var document = DocumentMother.CreateBasicDocument();
 
         document.Publish();
 
         Assert.True(document.IsPublished);
     }
-
 }
