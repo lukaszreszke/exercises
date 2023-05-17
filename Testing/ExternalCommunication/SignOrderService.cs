@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace ExternalCommunication;
 
 public class SignOrderService
@@ -33,7 +35,11 @@ public class SignOrderService
 
         if (signOrder.IsCompleted())
         {
-            _externalProviderClient.Complete(orderId);
+            var result = _externalProviderClient.Complete(orderId);
+            if (result != HttpStatusCode.OK)
+            {
+                throw new FailedToUpdateExternalProviderException();
+            }
         }
     }
 
@@ -52,6 +58,10 @@ public class SignOrderService
         var signOrder = _repository.Create();
         _externalProviderClient.Create(signOrder.Id);
     }
+}
+
+public class FailedToUpdateExternalProviderException : Exception
+{
 }
 
 public interface IUserRepository
@@ -76,11 +86,11 @@ public class InMemoryUserRepository : IUserRepository
 
 public interface IExternalProviderClient
 {
-    void Complete(int orderId);
-    void Cancel(int orderId);
-    void AddParticipant(string userEmail);
-    void Sign(string userEmail, int orderId);
-    void Create(int signOrderId);
+    HttpStatusCode Complete(int orderId);
+    HttpStatusCode Cancel(int orderId);
+    HttpStatusCode AddParticipant(string userEmail);
+    HttpStatusCode Sign(string userEmail, int orderId);
+    HttpStatusCode Create(int signOrderId);
 }
 
 public class SignOrder
