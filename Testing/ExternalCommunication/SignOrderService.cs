@@ -23,7 +23,13 @@ public class SignOrderService
         var signOrder = _repository.GetById(orderId);
         signOrder.AddSignee(signeeId);
         var user = _userRepository.FindById(signeeId);
-        _externalProviderClient.AddParticipant(user.Email);
+        var result = _externalProviderClient.AddParticipant(user.Email);
+        if (result != HttpStatusCode.OK)
+        {
+            throw new FailedToUpdateExternalProviderException();
+        }
+
+        _repository.SaveChanges();
     }
 
     public void Sign(int orderId, int signeeId)
@@ -40,6 +46,8 @@ public class SignOrderService
             {
                 throw new FailedToUpdateExternalProviderException();
             }
+
+            _repository.SaveChanges();
         }
     }
 
@@ -49,14 +57,27 @@ public class SignOrderService
         if (!signOrder.IsCompleted())
         {
             signOrder.Cancel();
-            _externalProviderClient.Cancel(orderId);
+            var result = _externalProviderClient.Cancel(orderId);
+            if (result != HttpStatusCode.OK)
+            {
+                throw new FailedToUpdateExternalProviderException();
+            }
+
+            _repository.SaveChanges();
+
         }
     }
 
     public void Create()
     {
         var signOrder = _repository.Create();
-        _externalProviderClient.Create(signOrder.Id);
+        var result = _externalProviderClient.Create(signOrder.Id);
+        if (result != HttpStatusCode.OK)
+        {
+            throw new FailedToUpdateExternalProviderException();
+        }
+
+        _repository.SaveChanges();
     }
 }
 
@@ -67,6 +88,7 @@ public class FailedToUpdateExternalProviderException : Exception
 public interface IUserRepository
 {
     User FindById(int signeeId);
+    void SaveChanges();
 }
 
 public class InMemoryUserRepository : IUserRepository
@@ -81,6 +103,10 @@ public class InMemoryUserRepository : IUserRepository
     public User FindById(int signeeId)
     {
         return _users.First(x => x.Id == signeeId);
+    }
+
+    public void SaveChanges()
+    {
     }
 }
 
@@ -163,16 +189,19 @@ public interface ISignOrderRepository
     SignOrder Create();
     SignOrder GetById(int orderId);
     List<SignOrder> GetSignOrders();
+    void SaveChanges();
 }
 
 public class InMemorySignOrderRepository : ISignOrderRepository
 {
     private List<SignOrder> _signOrders = new();
+    private List<SignOrder> _signOrdersToBeAdded = new();
+    
 
     public SignOrder Create()
     {
         var signOrder = new SignOrder(_signOrders.Count + 1);
-        _signOrders.Add(signOrder);
+        _signOrdersToBeAdded.Add(signOrder);
         return signOrder;
     }
 
@@ -184,5 +213,11 @@ public class InMemorySignOrderRepository : ISignOrderRepository
     public List<SignOrder> GetSignOrders()
     {
         return _signOrders.ToList();
+    }
+
+    public void SaveChanges()
+    {
+        _signOrders.AddRange(_signOrdersToBeAdded);
+        _signOrdersToBeAdded.Clear();
     }
 }
