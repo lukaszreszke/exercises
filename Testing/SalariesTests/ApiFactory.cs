@@ -7,15 +7,19 @@ using Xunit;
 using Salaries;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
+using System.Diagnostics;
+using System.Net;
+using Newtonsoft.Json;
 using Respawn;
 using Npgsql;
 using Salaries.Infra;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace SalariesTests 
 {
     public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-
         public HttpClient HttpClient { get; private set; } = null!;
 
         private DbConnection _dbConnection = null!;
@@ -79,6 +83,24 @@ namespace SalariesTests
         public async Task ResetDatabaseAsync()
         {
             await _respawner.ResetAsync(_dbConnection);
+        }
+        
+        public void EnsureSuccessStatusCode(HttpResponseMessage response)
+        {
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var error = response.Content.ReadAsStringAsync().Result;
+
+                if (string.IsNullOrEmpty(error)) return;
+
+                Trace.WriteLine((string) error.ToString());
+
+                throw new XunitException(error.ToString());
+            }
+            else
+            {
+                response.EnsureSuccessStatusCode();
+            }
         }
     }
 }

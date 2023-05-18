@@ -9,13 +9,15 @@ public class SalariesContext : DbContext
     {
     }
 
-    public DbSet<Salary> Salaries { get; set; }
     public DbSet<Benefit> Benefits { get; set; }
     public DbSet<Employee> Employees { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Employee>().HasOne<Salary>();
+        modelBuilder.Entity<Employee>().OwnsOne<Money>(x => x.Salary, i =>
+        {
+        });
+        modelBuilder.Entity<Employee>().OwnsOne<Money>(x => x.Salary, c => c.Property(x => x.Amount));
         modelBuilder.Entity<Employee>().HasMany<Benefit>();
         base.OnModelCreating(modelBuilder);
     }

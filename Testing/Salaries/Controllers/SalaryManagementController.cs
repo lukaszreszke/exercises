@@ -22,7 +22,11 @@ public class SalaryManagementController : ControllerBase
     [HttpPost("createEmployee")]
     public IActionResult CreateEmployee([FromBody] CreateEmployeeRequest request)
     {
-        var employee = _employeeService.CreateEmployee(request.FirstName, request.LastName);
+        var employee = _employeeService.CreateEmployee(
+            request.FirstName,
+            request.LastName,
+            DateTime.Parse(request.InMarketSince).ToUniversalTime(),
+            !string.IsNullOrEmpty(request.Salary) ? new Money(request.Salary) : null);
         return Ok(employee.Id);
     }
 
@@ -36,11 +40,10 @@ public class SalaryManagementController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var employee = new Employee("Jan", "Kowalski");
+        var employee = new Employee("Jan", "Kowalski", DateTime.Parse("2017-01-01"));
         _salariesContext.Employees.Add(employee);
-        _salariesContext.Salaries.Add(new Salary());
         _salariesContext.SaveChanges();
         
-        return Ok(_salariesContext.Salaries.ToList());
+        return Ok(_salariesContext.Employees.ToList());
     }
 }
