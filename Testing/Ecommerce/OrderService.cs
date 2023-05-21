@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Ecommerce;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -73,7 +75,7 @@ public class OrderService
 
     private bool IsAdminOrder()
     {
-        var user = _httpContextAccessor.HttpContext.User;
+        var user = _dbContext.Users.Find(_httpContextAccessor.HttpContext.User.Identity.Name);
         return user.IsInRole("Administrator");
     }
 }
@@ -83,6 +85,17 @@ public class Money
     public static Money Zero => new Money(0);
 
     public decimal Amount { get; }
+
+    public Money(string amount)
+    {
+        if (!decimal.TryParse(amount, NumberStyles.Number, CultureInfo.InvariantCulture,out var parsedAmount))
+            throw new ArgumentException("Amount must be a valid decimal number", nameof(amount));
+
+        if (parsedAmount < 0)
+            throw new ArgumentException("Amount cannot be negative", nameof(amount));
+
+        this.Amount = parsedAmount;
+    }
 
     public Money(decimal amount)
     {
@@ -160,6 +173,7 @@ public class OrderPlacedMessage
 public class EcommerceDbContext : DbContext
 {
     public DbSet<Order> Orders { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options) : base(options)
     {
@@ -208,6 +222,17 @@ public class EcommerceDbContext : DbContext
             .Property(oi => oi.Price)
             .IsRequired()
             .HasConversion(m => m.Amount, a => new Money(a));
+    }
+}
+
+public class User
+{
+    public Guid Id { get; set; }
+    public List<string> Roles { get; set; }
+
+    public bool IsInRole(string role)
+    {
+        return Roles.Contains(role);
     }
 }
 
