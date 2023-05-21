@@ -46,9 +46,9 @@ public class UnitTest
             Title = "Title",
             Chapters = new List<Chapter>
             {
-                new Chapter { Title = "Chapter 1", Content = "Some content here with more than ten words" },
-                new Chapter { Title = "Chapter 2", Content = "Some other content here with more than ten words" },
-                new Chapter { Title = "Chapter 3", Content = "Additional content here with more than ten words" }
+                new Chapter { Title = "Chapter 1", Content = "Some great and smart content here with more than ten words" },
+                new Chapter { Title = "Chapter 2", Content = "Some other great and smart content here with more than ten words" },
+                new Chapter { Title = "Chapter 3", Content = "Additional smart and great content here with more than ten words" }
             }
         };
 
