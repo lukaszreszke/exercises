@@ -64,11 +64,10 @@ public class SignOrderService
             }
 
             _repository.SaveChanges();
-
         }
     }
 
-    public void Create()
+    public int Create()
     {
         var signOrder = _repository.Create();
         var result = _externalProviderClient.Create(signOrder.Id);
@@ -78,6 +77,8 @@ public class SignOrderService
         }
 
         _repository.SaveChanges();
+
+        return signOrder.Id;
     }
 }
 
