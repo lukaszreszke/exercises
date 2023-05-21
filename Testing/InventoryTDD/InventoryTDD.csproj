@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Inventory\Inventory.csproj" />
-  </ItemGroup>
-
 </Project>
