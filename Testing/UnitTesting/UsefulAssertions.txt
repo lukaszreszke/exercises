@@ -1,0 +1,3 @@
+Assert.Throws<NameOfException>(() => order.METHOD_NAME)
+Assert.Equal
+Assert.Single
