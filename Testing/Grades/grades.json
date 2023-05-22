@@ -3,18 +3,18 @@
         "FirstName": "John",
         "LastName": "Doe",
         "Course": "Mathematics",
-        "Points": 850
+        "Points": 85 
     },
     {
         "FirstName": "Jane",
         "LastName": "Doe",
         "Course": "Physics",
-        "Points": 900
+        "Points": 90
     },
     {
         "FirstName": "Bob",
         "LastName": "Smith",
         "Course": "Chemistry",
-        "Points": 750
+        "Points": 75
     }
 ]

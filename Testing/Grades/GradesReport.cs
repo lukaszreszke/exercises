@@ -1,74 +1,76 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
 namespace Grades
 {
     public class GradesReport
     {
         private const string ApiUrl = "https://api.example.com/grades";
-        private const string XmlFilePath = "path/to/grades.xml";
 
         public async Task<List<StudentGrade>> GetGradesAsync()
         {
             var apiGrades = await GetGradesFromApiAsync();
-            var xmlGrades = GetGradesFromXml();
 
             var allGrades = new List<StudentGrade>();
             allGrades.AddRange(apiGrades.Select(g => new StudentGrade
             {
                 FullName = $"{g.FirstName} {g.LastName}",
                 Course = g.Course,
-                Grade = g.Points / 20.0 // Transformacja z punktów na ocenę
-            }));
-            allGrades.AddRange(xmlGrades.Select(g => new StudentGrade
-            {
-                FullName = g.FullName,
-                Course = g.Subject,
-                Grade = ConvertEvaluationToGrade(g.Evaluation) // Transformacja z stringa na ocenę
+                Grade = GradeFromPoints(g.Points) // Transform from points to grade
             }));
 
             return allGrades;
         }
 
+        private static double GradeFromPoints(int points)
+        {
+            if (points >= 90 && points <= 100)
+            {
+                return 5.0;
+            }
+            else if (points >= 80 && points < 90)
+            {
+                return 4.5;
+            }
+            else if (points >= 70 && points < 80)
+            {
+                return 4.0;
+            }
+            else if (points >= 60 && points < 70)
+            {
+                return 3.5;
+            }
+            else if (points >= 50 && points < 60)
+            {
+                return 3.0;
+            }
+            else if (points >= 45 && points < 50)
+            {
+                return 2.5;
+            }
+            else return 2.0;
+        }
+
         private async Task<List<ApiStudentGrade>> GetGradesFromApiAsync()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            var response = await client.GetAsync(ApiUrl);
+            if (response.StatusCode != HttpStatusCode.OK)
             {
-                var json = await client.GetStringAsync(ApiUrl);
-                return JsonConvert.DeserializeObject<List<ApiStudentGrade>>(json);
+                throw new InvalidResponseException();
             }
-        }
 
-        private List<XmlStudentGrade> GetGradesFromXml()
-        {
-            var doc = XDocument.Load(XmlFilePath);
-            return doc.Descendants("Grade")
-                .Select(g => new XmlStudentGrade
-                {
-                    FullName = (string)g.Element("FullName"),
-                    Subject = (string)g.Element("Subject"),
-                    Evaluation = (string)g.Element("Evaluation")
-                })
-                .ToList();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<ApiStudentGrade>>(json);
         }
+    }
 
-        private double ConvertEvaluationToGrade(string evaluation)
-        {
-            switch (evaluation)
-            {
-                case "A+": return 4.5;
-                case "A": return 4.0;
-                case "B+": return 3.5;
-                case "B": return 3.0;
-                case "C+": return 2.5;
-                case "C": return 2.0;
-                case "D+": return 1.5;
-                case "D": return 1.0;
-                default: return 0.0;
-            }
-        }
+    public class InvalidResponseException : Exception
+    {
     }
 }

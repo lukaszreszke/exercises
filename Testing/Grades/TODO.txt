@@ -1,0 +1,30 @@
+* In the `GradesReport` class the there are grades that are fetched from external sources and transformed
+* Transforming of the grades is changing them from one class to the other: 
+    * ApiStudentGrade -> StudentGrade
+* The points are calculated using the following formula:
+
+* For the data from the JSON, the grade is expressed as points from the range of 0-100.
+* For the range 90-100, the grade is 5.0
+* For the range 80-89, the grade is 4.5
+* For the range 70-79, the grade is 4
+* For the range 60-69, the grade is 3.5
+* For the range 50-59, the grade is 3
+* For the range 45-49, the grade is 2.5
+* Everything below is 2
+
+TODO: 
+* Make transformation of ApiStudentGrade -> StudentGrade unit-testable
+* Unit test the transformation
+* Test only part of the code which gets the grades from the endpoint. Focus on the part
+which checks how the code behaves when:
+    * the status code is 200,
+    * the status code is different than 200
+* The code getting the data from the api is not in testable form right now.
+In order to test that code, we should:
+    * create an interface, for example IHttpClientWrapper
+        * the wrapper should implement GetAsync(string url) method, that returns 
+        List<ApiStudentGrade>
+    * create concrete class implementing IHttpClientWrapper and move the code from the
+    `GetGradesFromApiAsync` into that class, into the GetAsync method (defined in previous bullet).
+    * Now, it should be possible to pass IHttpClientWrapper through Dependency Injection into the GradesReport,
+    stub it, and see the behavior of it in GradesReport class
