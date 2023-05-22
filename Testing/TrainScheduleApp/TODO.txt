@@ -1,0 +1,8 @@
+Consider a train company that has 2 legacy system and is creating a new one.
+Given two different Train Schedules from legacy systems(A and B):
+* Write method in ResultTrainSchedule that will transform TrainScheduleA into ResultTrainSchedule
+* Write method in ResultTrainSchedule that will transform TrainScheduleA into ResultTrainSchedule
+* Test both methods
+* Notice that TrainB might have NULL value in TrainName. If that is the case, the TrainName
+should be set to $"TrainB {TrainB_ID}".
+* SampleData is available in SampleData.cs
