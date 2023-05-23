@@ -117,6 +117,35 @@ namespace SalariesTests
             Assert.True(_factory.GetSalariesContext().Employees.ToList().Count == 1);
         }
 
+        [Fact]
+        public async Task assign_benefit_to_an_employee()
+        {
+            var client = _factory.HttpClient;
+            var response = await client.PostAsJsonAsync("/SalaryManagement/CreateEmployee",
+                new CreateEmployeeRequest
+                {
+                    FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2020-01-01"
+                });
+            _factory.EnsureSuccessStatusCode(response);
+            var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
+            var employee = _factory.GetSalariesContext().Employees.Find(employeeId);
+            var benefit = new Benefit(100, "Multisport");
+            var context = _factory.GetSalariesContext();
+            context.Benefits.Add(benefit);
+            await context.SaveChangesAsync();
+
+            var addBenefitResponse = await client.PostAsJsonAsync("SalaryManagement/AddBenefitToEmployee",
+                new { EmployeeId = employee.Id, BenefitId = benefit.Id });
+            _factory.EnsureSuccessStatusCode(addBenefitResponse);
+
+            var result = await _factory.GetSalariesContext().Employees.Include(x => x.Benefits)
+                .FirstOrDefaultAsync(x => x.Id == employeeId);
+
+            Assert.Single(result.Benefits);
+            var theBenefit = result.Benefits.First();
+            Assert.Equal(theBenefit.Id, benefit.Id);
+        }
+
         public Task InitializeAsync() => Task.CompletedTask;
         public Task DisposeAsync() => _resetDatabase();
     }

@@ -91,8 +91,12 @@ namespace SalariesTests
             {
                 var error = response.Content.ReadAsStringAsync().Result;
 
+                if (string.IsNullOrEmpty(error))
+                {
+                    throw new XunitException(response.ReasonPhrase);
+                }
+                
                 Trace.WriteLine((string) error.ToString());
-
                 throw new XunitException(error.ToString());
             }
             else

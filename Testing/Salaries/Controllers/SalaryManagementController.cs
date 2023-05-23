@@ -31,6 +31,14 @@ public class SalaryManagementController : ControllerBase
             !string.IsNullOrEmpty(request.Salary) ? new Money(request.Salary) : null);
         return Ok(employee.Id);
     }
+    
+    [HttpPost("AddBenefitToEmployee")]
+    public IActionResult AddBenefitToEmployee([FromBody] AddBenefitToEmployeeRequest request)
+    {
+        _benefitService.AddBenefitForEmployee(request.EmployeeId, request.BenefitId);
+        return Ok();
+    }
+
 
     [HttpGet("employees")]
     public IActionResult GetEmployees()
@@ -48,4 +56,10 @@ public class SalaryManagementController : ControllerBase
         
         return Ok(_salariesContext.Employees.ToList());
     }
+}
+
+public class AddBenefitToEmployeeRequest
+{
+    public int EmployeeId { get; set; }
+    public int BenefitId { get; set; }
 }
