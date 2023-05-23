@@ -42,7 +42,7 @@ public class SalaryManagementController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        var employee = new Employee("Jan", "Kowalski", DateTime.Parse("2017-01-01"));
+        var employee = new Employee("Jan", "Kowalski", DateTime.Parse("2017-01-01").ToUniversalTime());
         _salariesContext.Employees.Add(employee);
         _salariesContext.SaveChanges();
         
