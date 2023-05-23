@@ -1,3 +1,5 @@
+using Salaries.Application;
+
 namespace Salaries.Domain;
 
 public class Employee
@@ -39,5 +41,32 @@ public class Employee
     public void SetSalary(Money? amount)
     {
         Salary = amount;
+    }
+
+    public void GrantBenefit(Benefit benefit)
+    {
+        if (Grade == 3  &&
+            Benefits.Sum(x => x.Value) + benefit.Value < 10000)
+        {
+            Benefits.Add(benefit);
+        }
+        else if (Grade == 2 && Benefits.Count < 5 &&
+                 Benefits.Sum(x => x.Value) + benefit.Value < 6000)
+        {
+            Benefits.Add(benefit);
+        }
+        else if (Grade == 1 && Benefits.Count < 5)
+        {
+            if (PromotedAt <= DateTime.UtcNow.AddYears(-3) &&
+                Benefits.Sum(x => x.Value) + benefit.Value < 3000)
+            {
+                Benefits.Add(benefit);
+            }
+            else if (Benefits.Sum(x => x.Value) + benefit.Value < 1500)
+            {
+                Benefits.Add(benefit);
+            }
+        }
+        else throw new EmployeeIsNotEligibleForBenefit(Id);
     }
 }

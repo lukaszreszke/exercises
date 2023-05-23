@@ -179,7 +179,6 @@ namespace SalariesTests
             var benefit = new Benefit(benefitValue, "Multisport");
             context.Benefits.Add(benefit);
             await context.SaveChangesAsync();
-        
             
             var addBenefitResponse = await client.PostAsJsonAsync("SalaryManagement/AddBenefitToEmployee",
                 new { EmployeeId = employee.Id, BenefitId = benefit.Id });
