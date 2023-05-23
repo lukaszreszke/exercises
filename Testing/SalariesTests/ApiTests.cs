@@ -94,10 +94,11 @@ namespace SalariesTests
             context.Benefits.Add(new Benefit(300, "Multisport"));
             await context.SaveChangesAsync();
 
+            var employeeId = context.Employees.First().Id;
             var benefit = context.Benefits.First();
 
             var response = await _factory.HttpClient.PostAsJsonAsync("SalaryManagement/plop",
-                new AssignBenefit { BenefitId = benefit.Id, EmployeeId = 1 });
+                new AssignBenefit { BenefitId = benefit.Id, EmployeeId = employeeId });
             _factory.EnsureSuccessStatusCode(response);
             var emp = context.Employees.Include(x => x.Benefits).ToList();
         }

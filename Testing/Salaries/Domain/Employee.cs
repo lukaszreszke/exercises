@@ -5,6 +5,7 @@ public class Employee
     private Employee()
     {
         // EF
+        Benefits = new List<Benefit>();
     }
 
     public Employee(string firstName, string lastName, DateTime inJobMarketSince, int grade = 1)

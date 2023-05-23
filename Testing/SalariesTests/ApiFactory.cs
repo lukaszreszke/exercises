@@ -91,7 +91,6 @@ namespace SalariesTests
             {
                 var error = response.Content.ReadAsStringAsync().Result;
 
-
                 Trace.WriteLine((string) error.ToString());
 
                 throw new XunitException(error.ToString());
