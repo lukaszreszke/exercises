@@ -35,7 +35,15 @@ public class SalaryManagementController : ControllerBase
     [HttpPost("AddBenefitToEmployee")]
     public IActionResult AddBenefitToEmployee([FromBody] AddBenefitToEmployeeRequest request)
     {
-        _benefitService.AddBenefitForEmployee(request.EmployeeId, request.BenefitId);
+        try
+        {
+            _benefitService.AddBenefitForEmployee(request.EmployeeId, request.BenefitId);
+        }
+        catch (EmployeeIsNotEligibleForBenefit)
+        {
+            return BadRequest();
+        }
+
         return Ok();
     }
 

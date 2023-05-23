@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -117,8 +118,15 @@ namespace SalariesTests
             Assert.True(_factory.GetSalariesContext().Employees.ToList().Count == 1);
         }
 
-        [Fact]
-        public async Task assign_benefit_to_an_employee()
+        [Theory]
+        [InlineData(1499, 1)]
+        [InlineData(1499, 2)]
+        [InlineData(1499, 3)]
+        [InlineData(2500, 1)]
+        [InlineData(2500, 2)]
+        [InlineData(2500, 3)]
+        [InlineData(5000, 2)]
+        public async Task assign_benefit_to_an_employee(decimal benefitValue, int grade)
         {
             var client = _factory.HttpClient;
             var response = await client.PostAsJsonAsync("/SalaryManagement/CreateEmployee",
@@ -127,10 +135,14 @@ namespace SalariesTests
                     FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2020-01-01"
                 });
             _factory.EnsureSuccessStatusCode(response);
-            var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
-            var employee = _factory.GetSalariesContext().Employees.Find(employeeId);
-            var benefit = new Benefit(100, "Multisport");
             var context = _factory.GetSalariesContext();
+            var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
+            var employee = context.Employees.Find(employeeId);
+            for (int i = 1; i < grade; i++)
+            {
+                employee.Promote();
+            }
+            var benefit = new Benefit(benefitValue, "Multisport");
             context.Benefits.Add(benefit);
             await context.SaveChangesAsync();
 
@@ -146,6 +158,34 @@ namespace SalariesTests
             Assert.Equal(theBenefit.Id, benefit.Id);
         }
 
+        [Theory]
+        [InlineData(10000, 3)]
+        public async Task cannot_assign_benefit_to_non_eligible_employee(decimal benefitValue, int grade)
+        {
+            var client = _factory.HttpClient;
+            var response = await client.PostAsJsonAsync("/SalaryManagement/CreateEmployee",
+                new CreateEmployeeRequest
+                {
+                    FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2020-01-01"
+                });
+            _factory.EnsureSuccessStatusCode(response);
+            var context = _factory.GetSalariesContext();
+            var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
+            var employee = context.Employees.Find(employeeId);
+            for (int i = 1; i < grade; i++)
+            {
+                employee.Promote();
+            }
+            var benefit = new Benefit(benefitValue, "Multisport");
+            context.Benefits.Add(benefit);
+            await context.SaveChangesAsync();
+        
+            
+            var addBenefitResponse = await client.PostAsJsonAsync("SalaryManagement/AddBenefitToEmployee",
+                new { EmployeeId = employee.Id, BenefitId = benefit.Id });
+            Assert.Equal(HttpStatusCode.BadRequest, addBenefitResponse.StatusCode);
+        }
+        
         public Task InitializeAsync() => Task.CompletedTask;
         public Task DisposeAsync() => _resetDatabase();
     }
