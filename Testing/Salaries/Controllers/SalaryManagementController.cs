@@ -35,8 +35,8 @@ public class SalaryManagementController : ControllerBase
     [HttpGet("employees")]
     public IActionResult GetEmployees()
     {
-        // TODO: FIXME
-        return Ok();
+        var employees = _salariesContext.Employees.ToList();
+        return Ok(employees);
     }
     
     [HttpGet]
