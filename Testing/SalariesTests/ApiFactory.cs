@@ -91,7 +91,6 @@ namespace SalariesTests
             {
                 var error = response.Content.ReadAsStringAsync().Result;
 
-                if (string.IsNullOrEmpty(error)) return;
 
                 Trace.WriteLine((string) error.ToString());
 

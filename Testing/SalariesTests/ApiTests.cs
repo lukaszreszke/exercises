@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Salaries.Controllers;
 using Salaries.Domain;
@@ -31,7 +32,7 @@ namespace SalariesTests
             var client = _factory.HttpClient;
 
             var response = await client.PostAsJsonAsync("/SalaryManagement/CreateEmployee",
-                new CreateEmployeeRequest() { FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2020-01-01"});
+                new CreateEmployeeRequest() { FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2020-01-01" });
             _factory.EnsureSuccessStatusCode(response);
             var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
             var employee = _factory.GetSalariesContext().Employees.Find(employeeId);
@@ -74,7 +75,7 @@ namespace SalariesTests
         {
             var context = _factory.GetSalariesContext();
 
-            context.Employees.Add(new Employee("John", "Doe", DateTime.UtcNow.AddYears(-4) ,1));
+            context.Employees.Add(new Employee("John", "Doe", DateTime.UtcNow.AddYears(-4), 1));
             context.Employees.Add(new Employee("Jane", "Doe", DateTime.UtcNow.AddYears(-1), 3));
             context.Benefits.Add(new Benefit(300, "Multisport"));
             await context.SaveChangesAsync();
@@ -85,19 +86,37 @@ namespace SalariesTests
         }
 
         [Fact]
+        public async Task employee_can_have_benefits_1337()
+        {
+            var context = _factory.GetSalariesContext();
+
+            context.Employees.Add(new Employee("Jane", "Doe", DateTime.UtcNow.AddYears(-1), 1));
+            context.Benefits.Add(new Benefit(300, "Multisport"));
+            await context.SaveChangesAsync();
+
+            var benefit = context.Benefits.First();
+
+            var response = await _factory.HttpClient.PostAsJsonAsync("SalaryManagement/plop",
+                new AssignBenefit { BenefitId = benefit.Id, EmployeeId = 1 });
+            _factory.EnsureSuccessStatusCode(response);
+            var emp = context.Employees.Include(x => x.Benefits).ToList();
+        }
+
+        [Fact]
         public async Task should_create_employee_with_initial_salary()
         {
             var client = _factory.HttpClient;
 
             var response = await client.PostAsJsonAsync("/SalaryManagement/CreateEmployee",
-                new CreateEmployeeRequest() { FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2019-01-01", Salary = "5,000"});
+                new CreateEmployeeRequest()
+                    { FirstName = "Jan", LastName = "Kowalski", InMarketSince = "2019-01-01", Salary = "5,000" });
             _factory.EnsureSuccessStatusCode(response);
             var employeeId = JsonConvert.DeserializeObject<int>(await response.Content.ReadAsStringAsync());
             var employee = _factory.GetSalariesContext().Employees.Find(employeeId);
 
             Assert.NotNull(employee);
             Assert.Equal("Jan", employee.FirstName);
-            Assert.Equal("Kowalski", employee.LastName); 
+            Assert.Equal("Kowalski", employee.LastName);
             Assert.Equal(decimal.Parse("5,000"), employee.Salary.Amount);
         }
 

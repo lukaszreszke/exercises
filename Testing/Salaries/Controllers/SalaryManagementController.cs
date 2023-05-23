@@ -12,11 +12,13 @@ public class SalaryManagementController : ControllerBase
 {
     private readonly SalariesContext _salariesContext;
     private readonly EmployeeService _employeeService;
+    private readonly BenefitService _benefitService;
 
-    public SalaryManagementController(SalariesContext salariesContext, EmployeeService employeeService)
+    public SalaryManagementController(SalariesContext salariesContext, EmployeeService employeeService, BenefitService benefitService)
     {
         _salariesContext = salariesContext;
         _employeeService = employeeService;
+        _benefitService = benefitService;
     }
 
     [HttpPost("createEmployee")]

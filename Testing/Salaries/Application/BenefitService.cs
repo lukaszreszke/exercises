@@ -18,17 +18,17 @@ public class BenefitService
         var benefit = _salariesContext.Benefits.Find(benefitId);
         if (benefit == null) throw new BenefitNotFound(benefitId);
 
-        if (employee.Grade == 3 && employee.Benefits.Any() &&
+        if (employee.Grade == 3  &&
             employee.Benefits.Sum(x => x.Value) + benefit.Value < 10000)
         {
             employee.Benefits.Add(benefit);
         }
-        else if (employee.Grade == 2 && employee.Benefits.Any() && employee.Benefits.Count < 5 &&
+        else if (employee.Grade == 2 && employee.Benefits.Count < 5 &&
                  employee.Benefits.Sum(x => x.Value) + benefit.Value < 6000)
         {
             employee.Benefits.Add(benefit);
         }
-        else if (employee.Grade == 1 && employee.Benefits.Any() && employee.Benefits.Count < 5)
+        else if (employee.Grade == 1 && employee.Benefits.Count < 5)
         {
             if (employee.PromotedAt <= DateTime.UtcNow.AddYears(-3) &&
                 employee.Benefits.Sum(x => x.Value) + benefit.Value < 3000)
