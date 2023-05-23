@@ -86,24 +86,6 @@ namespace SalariesTests
         }
 
         [Fact]
-        public async Task employee_can_have_benefits_1337()
-        {
-            var context = _factory.GetSalariesContext();
-
-            context.Employees.Add(new Employee("Jane", "Doe", DateTime.UtcNow.AddYears(-1), 1));
-            context.Benefits.Add(new Benefit(300, "Multisport"));
-            await context.SaveChangesAsync();
-
-            var employeeId = context.Employees.First().Id;
-            var benefit = context.Benefits.First();
-
-            var response = await _factory.HttpClient.PostAsJsonAsync("SalaryManagement/plop",
-                new AssignBenefit { BenefitId = benefit.Id, EmployeeId = employeeId });
-            _factory.EnsureSuccessStatusCode(response);
-            var emp = context.Employees.Include(x => x.Benefits).ToList();
-        }
-
-        [Fact]
         public async Task should_create_employee_with_initial_salary()
         {
             var client = _factory.HttpClient;
