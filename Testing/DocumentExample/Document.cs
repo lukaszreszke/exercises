@@ -14,7 +14,7 @@ public class Document
 
     public int AddChange(string content)
     {
-        int changeId = Changes.Keys.Last() + 1;
+        int changeId = Changes.Any() ? Changes.Keys.Last() + 1 : 1;
         Changes.Add(changeId, content);
         return changeId;
     }
