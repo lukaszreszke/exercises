@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grades", "Grades\Grades.csproj", "{50176434-6C4F-4C93-964C-BC25E71E1ACD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grades", "Grades\Grades.csproj", "{33E80649-90C7-41F3-9B70-E6531968ACC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradesTest", "GradesTest\GradesTest.csproj", "{AAD611BF-69EB-47C9-B8DF-ADF0EC4A1012}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +11,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{50176434-6C4F-4C93-964C-BC25E71E1ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50176434-6C4F-4C93-964C-BC25E71E1ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50176434-6C4F-4C93-964C-BC25E71E1ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50176434-6C4F-4C93-964C-BC25E71E1ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E80649-90C7-41F3-9B70-E6531968ACC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E80649-90C7-41F3-9B70-E6531968ACC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E80649-90C7-41F3-9B70-E6531968ACC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E80649-90C7-41F3-9B70-E6531968ACC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD611BF-69EB-47C9-B8DF-ADF0EC4A1012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD611BF-69EB-47C9-B8DF-ADF0EC4A1012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD611BF-69EB-47C9-B8DF-ADF0EC4A1012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD611BF-69EB-47C9-B8DF-ADF0EC4A1012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
