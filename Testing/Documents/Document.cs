@@ -62,6 +62,11 @@ namespace Tests.Documents
         {
             Document document = _documentRepository.GetById(docId);
 
+            if (document.Status.Code != AvailableStatuses.PUBLISHED.ToString())
+            {
+                throw new UnpublishedDocumentCannotBeShared();
+            }
+            
             if (document.User.Id == _executionContextAccessor.UserId)
             {
                 var readerUser = new UserRepository().GetById(readerId);
@@ -79,6 +84,10 @@ namespace Tests.Documents
         public async Task PublishDocument(Guid docId, HttpClient httpClient)
         {
             Document document = _documentRepository.GetById(docId);
+            if (document.Status.Code != AvailableStatuses.VERIFIED.ToString())
+            {
+                throw new CannotPublishUnverifiedDocument();
+            }
             document.Status = new Status() {Code = AvailableStatuses.PUBLISHED.ToString()};
             _documentRepository.Save(document);
             PrinterFacade printerFacade = new PrinterFacade();
@@ -115,6 +124,15 @@ namespace Tests.Documents
             _documentRepository.Save(document);
         }
     }
+
+    public class UnpublishedDocumentCannotBeShared : Exception
+    {
+    }
+
+    public class CannotPublishUnverifiedDocument : Exception
+    {
+    }
+
     #region interfaces
     internal class Configuration
     {
