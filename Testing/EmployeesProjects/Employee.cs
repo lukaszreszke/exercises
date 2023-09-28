@@ -4,7 +4,8 @@ namespace EmployeesProjects;
 
 public class Employee
 {
-    public string Name { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public string Department { get; set; }
     public decimal Salary { get; set; }
     public List<Project> Projects { get; set; } = new List<Project>();
@@ -18,7 +19,8 @@ public class Employee
 public static class ObjectMother {
     public static Employee WithName(this Employee employee, string name)
     {
-        employee.Name = name;
+        employee.FirstName = name.Split(" ")[0];
+        employee.LastName = name.Split(" ")[1];
         return employee;
     }
 
