@@ -8,19 +8,32 @@ public class DocumentsService
     private const string ROOT_URL = "https://example.com/documents/";
     private readonly IDocumentRepository _documentRepository;
     private readonly IExecutionContextAccessor _executionContextAccessor;
+    private readonly IExportPDF _exportPdf;
     private readonly IEmailGateway _emailGateway;
     private static readonly ILog Logger = LogManager.GetLogger(typeof(DocumentsService));
 
     public DocumentsService(
         IDocumentRepository documentRepository,
-        IExecutionContextAccessor executionContextAccessor
+        IExecutionContextAccessor executionContextAccessor,
+        IExportPDF exportPdf
     )
     {
         _documentRepository = documentRepository;
         _executionContextAccessor = executionContextAccessor;
+        _exportPdf = exportPdf;
         _emailGateway = new EmailGateway();
     }
 
+    public void ExportAsPdf(Guid docId)
+    {
+        var document = _documentRepository.GetById(docId);
+
+        var pdfAccessLink = _exportPdf.Export(document);
+
+        document.PdfAccessLink = pdfAccessLink;
+        document.PdfVersion = _exportPdf.GetExportVersion();
+    }
+    
     public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
         var draftStatus = new Status {Code = AvailableStatuses.DRAFT.ToString()};

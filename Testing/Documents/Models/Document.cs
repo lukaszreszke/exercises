@@ -3,6 +3,8 @@
     public class Document
     {
         public Uri AccessLink { get; set; }
+        public Uri PdfAccessLink { get; set; }
+        public double PdfVersion { get; set; }
         public Status Status { get; set; }
         public User User { get; set; }
         public Guid Id { get; set; }

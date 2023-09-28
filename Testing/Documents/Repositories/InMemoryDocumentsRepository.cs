@@ -6,11 +6,19 @@ public class InMemoryDocumentRepository
 
     public Document GetById(Guid id)
     {
-        return _documents.FirstOrDefault(x => x.Id == id);
+        return _documents.SingleOrDefault(x => x.Id == id);
     }
     
     public void Save(Document document)
     {
-        _documents.Add(document);
+        var doc = _documents.FirstOrDefault(x => x.Id == document.Id);
+        if (doc == null)
+        {
+            _documents.Add(document);
+        }
+        else
+        {
+            doc = document;
+        }
     }
 }
