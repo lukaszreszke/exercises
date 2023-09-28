@@ -84,6 +84,11 @@ public class DocumentsService
         }
     }
 
+    public async Task ResendDocument(Guid docId)
+    {
+        /* TODO: To be implemented */
+    }
+
     public async Task PublishDocument(Guid docId, HttpClient httpClient)
     {
         Document document = _documentRepository.GetById(docId);
