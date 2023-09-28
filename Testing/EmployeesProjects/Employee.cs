@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace EmployeesProjects;
 
 public class Employee
@@ -5,7 +7,7 @@ public class Employee
     public string Name { get; set; }
     public string Department { get; set; }
     public decimal Salary { get; set; }
-    public List<Project> Projects { get; set; }
+    public List<Project> Projects { get; set; } = new List<Project>();
 
     public bool ShouldReceiveBonus()
     {
