@@ -21,7 +21,7 @@ public class DocumentsService
         _emailGateway = new EmailGateway();
     }
 
-    public Guid CreateDocument(DocumentType documentType, string title)
+    public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
         var draftStatus = new Status {Code = AvailableStatuses.DRAFT.ToString()};
         var user = new UserRepository().GetById(_executionContextAccessor.UserId);
@@ -32,6 +32,7 @@ public class DocumentsService
             DocumentType = documentType,
             User = user,
             Title = title,
+            Content = content,
             AccessLink = new Uri(ROOT_URL)
         };
 
@@ -92,13 +93,24 @@ public class DocumentsService
         }
         document.Status = new Status() {Code = AvailableStatuses.PUBLISHED.ToString()};
         _documentRepository.Save(document);
-        PrinterFacade printerFacade = new PrinterFacade();
-        for (int i = 0; i < document.Readers.Count + 1; i++) // readers + owner
-        {
-            printerFacade.Print(document);
-        }
+        
+        PrintDocument(document);
+        SendEmails(document);
 
-        foreach (var reader in document.Readers.Concat(new List<User> {document.User}))
+        try
+        {
+            await httpClient.PostAsJsonAsync("api/DocumentsArchive/publish", document);
+        }
+        catch (Exception e)
+        {
+            Logger.Error("Failed to publish document into Documents Archive", e);
+            throw e;
+        }
+    }
+
+    private void SendEmails(Document document)
+    {
+        foreach (var reader in document.Readers.Concat(new List<User> { document.User }))
         {
             var time = Configuration.GetPreferredEmailReceivalTimeFor(reader);
             _emailGateway.ScheduleEmail(reader.Email,
@@ -109,15 +121,14 @@ public class DocumentsService
             document.Readers.Remove(reader);
             _documentRepository.Save(document);
         }
+    }
 
-        try
+    private static void PrintDocument(Document document)
+    {
+        PrinterFacade printerFacade = new PrinterFacade();
+        for (int i = 0; i < document.Readers.Count + 1; i++) // readers + owner
         {
-            await httpClient.PostAsJsonAsync("api/DocumentsArchive/publish", document);
-        }
-        catch (Exception e)
-        {
-            Logger.Error("Failed to publish document into Documents Archive", e);
-            throw e;
+            printerFacade.Print(document);
         }
     }
 
