@@ -53,7 +53,7 @@ namespace SalariesTests
             await context.SaveChangesAsync();
 
             var response = await client.GetAsync("SalaryManagement/Employees");
-            response.EnsureSuccessStatusCode();
+            _factory.EnsureSuccessStatusCode(response);
             var employees =
                 JsonConvert.DeserializeObject<List<EmployeeResponse>>(await response.Content.ReadAsStringAsync());
 
