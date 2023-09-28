@@ -2,13 +2,9 @@ namespace Tests.Documents;
 
 internal static class Configuration
 {
-    public static decimal GetSafeValue()
+    public static DateTime GetPreferredEmailReceivalTimeFor(User reader)
     {
-        return new decimal(40000.00);
-    }
-
-    public static DateTime GetPreferedEmailReceivalTimeFor(User reader)
-    {
+        /* Call to external database */
         throw new NotImplementedException();
     }
 }
