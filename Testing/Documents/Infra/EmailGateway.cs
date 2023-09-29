@@ -7,7 +7,7 @@ public class EmailGateway : IEmailGateway
         throw new NotImplementedException();
     }
 
-    public void ScheduleEmail(object readerEmail, string s, DateTime dateTime)
+    public void ScheduleEmail(object readerEmail, string s, TimeOnly dateTime)
     {
         throw new NotImplementedException();
     }
