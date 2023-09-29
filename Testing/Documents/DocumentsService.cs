@@ -57,8 +57,6 @@ public class DocumentsService
         _emailGateway.SendEmail(user.Email, document.AccessLink);
         _documentRepository.Save(document);
 
-        MessageBus.Publish(new DocumentCreated(document.Id));
-
         return document.Id;
     }
 
