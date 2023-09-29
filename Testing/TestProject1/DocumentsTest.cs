@@ -14,7 +14,11 @@ public class DocumentsTest
     [Fact]
     public void verify_draft_document()
     {
+        var document = new Document();
+
+        document.Verify();
         
+        Assert.Equal("VERIFIED", document.Status.Code);
     }
 
     [Fact]
@@ -32,6 +36,12 @@ public class DocumentsTest
     [Fact]
     public void cannot_verify_non_draft_document()
     {
+        var document = new Document();
         
+        document.Verify();
+        document.Status = new Status { Code = AvailableStatuses.PUBLISHED.ToString() };
+        
+        Assert.Throws<CannotVerifyPublishedDocument>(() => document.Verify());
+        Assert.Equal("PUBLISHED", document.Status.Code); 
     }
 }
