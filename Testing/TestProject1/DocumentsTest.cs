@@ -1,3 +1,5 @@
+using Tests.Documents;
+
 namespace TestProject1;
 
 public class DocumentsTest
@@ -5,7 +7,8 @@ public class DocumentsTest
     [Fact]
     public void draft_is_default_status()
     {
-        
+        var document = new Document();
+        Assert.Equal("DRAFT", document.Status.Code);
     }
 
     [Fact]
