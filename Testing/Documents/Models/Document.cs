@@ -27,5 +27,15 @@
             
             Status = new Status { Code = AvailableStatuses.VERIFIED.ToString() };
         }
+
+        public void Publish()
+        {
+            if (Status.Code != AvailableStatuses.VERIFIED.ToString())
+            {
+                throw new CannotPublishUnverifiedDocument();
+            }
+            
+            Status = new Status { Code = AvailableStatuses.PUBLISHED.ToString() };
+        }
     }
 }
