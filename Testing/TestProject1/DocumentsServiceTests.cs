@@ -20,7 +20,8 @@ public class DocumentsServiceTests
             contextAccessorMock.Object,
             null,
             emailGatewayMock.Object,
-            usersRepository);
+            usersRepository,
+            null);
 
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
@@ -50,7 +51,8 @@ public class DocumentsServiceTests
             contextAccessorMock.Object,
             null,
             emailGatewayMock.Object,
-            usersRepository);
+            usersRepository,
+            null);
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
         
