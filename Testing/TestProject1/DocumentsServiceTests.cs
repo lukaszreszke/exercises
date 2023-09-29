@@ -29,6 +29,7 @@ public class DocumentsServiceTests
         Assert.Equal("Tests", result.Title);
         Assert.Equal("Are Cool And Possible To Do In Your Code. Check How.", result.Content);
         Assert.Equal(DocumentType.MANUAL, result.DocumentType);
-        emailGatewayMock.Verify(x => x.SendEmail("tests@possible.com", documentId));
+        emailGatewayMock.Verify(x => x.SendEmail("tests@possible.com", 
+            $"https://example.com/documents//{user.Id}/Tests"));
     }
 }
