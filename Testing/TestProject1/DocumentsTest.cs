@@ -48,8 +48,8 @@ public class DocumentsTest
         var document = new Document();
         
         document.Verify();
-        document.Status = new Status { Code = AvailableStatuses.PUBLISHED.ToString() };
-        
+        document.Publish();
+
         Assert.Throws<CannotVerifyPublishedDocument>(() => document.Verify());
         Assert.Equal("PUBLISHED", document.Status.Code); 
     }
