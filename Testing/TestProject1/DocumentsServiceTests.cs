@@ -63,7 +63,7 @@ public class DocumentsServiceTests
     }
     
     [Fact]
-    public void publishes_document()
+    public async Task publishes_document()
     {
         var documentsRepository = new InMemoryDocumentRepository();
         var usersRepository = new InMemoryUsersRepository();
@@ -83,7 +83,7 @@ public class DocumentsServiceTests
             "Are Cool And Possible To Do In Your Code. Check How.");
         documentsService.VerifyDocument(documentId);
  
-        documentsService.PublishDocument(documentId, documentsHttpClient.Object);
+        await documentsService.PublishDocument(documentId, documentsHttpClient.Object);
 
         var result = documentsRepository.GetById(documentId);
         Assert.Equal("PUBLISHED", result.Status.Code);
