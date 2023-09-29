@@ -129,7 +129,7 @@ public class DocumentsService
     {
         foreach (var reader in document.Readers.Concat(new List<User> { document.User }))
         {
-            var time = Configuration.GetPreferredEmailReceivalTimeFor(reader);
+            var time = _configuration.GetPreferredEmailReceivalTimeFor(reader);
             _emailGateway.ScheduleEmail(reader.Email,
                 $"Document {document.Title} is printed and waits for you in the office." +
                 $"You have to come and get it personally." +
