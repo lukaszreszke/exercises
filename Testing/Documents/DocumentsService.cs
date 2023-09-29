@@ -12,6 +12,7 @@ public class DocumentsService
     private readonly IEmailGateway _emailGateway;
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
+    private readonly IPrinterFacade _printerFacade;
     private static readonly ILog Logger = LogManager.GetLogger(typeof(DocumentsService));
 
     public DocumentsService(
@@ -20,7 +21,8 @@ public class DocumentsService
         IExportPDF exportPdf,
         IEmailGateway emailGateway,
         IUserRepository userRepository,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IPrinterFacade printerFacade
     )
     {
         _documentRepository = documentRepository;
@@ -29,6 +31,7 @@ public class DocumentsService
         _emailGateway = emailGateway;
         _userRepository = userRepository;
         _configuration = configuration;
+        _printerFacade = printerFacade;
     }
 
     public void ExportAsPdf(Guid docId)
@@ -140,12 +143,11 @@ public class DocumentsService
         }
     }
 
-    private static void PrintDocument(Document document)
+    private void PrintDocument(Document document)
     {
-        PrinterFacade printerFacade = new PrinterFacade();
         for (int i = 0; i < document.Readers.Count + 1; i++) // readers + owner
         {
-            printerFacade.Print(document);
+            _printerFacade.Print(document);
         }
     }
 
