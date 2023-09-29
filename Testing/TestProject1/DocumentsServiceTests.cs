@@ -26,6 +26,7 @@ public class DocumentsServiceTests
             "Are Cool And Possible To Do In Your Code. Check How.");
 
         var result = documentsRepository.GetById(documentId);
+        Assert.Equal("DRAFT", result.Status.Code);
         Assert.Equal("Tests", result.Title);
         Assert.Equal("Are Cool And Possible To Do In Your Code. Check How.", result.Content);
         Assert.Equal(DocumentType.MANUAL, result.DocumentType);
