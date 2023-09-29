@@ -10,19 +10,22 @@ public class DocumentsService
     private readonly IExecutionContextAccessor _executionContextAccessor;
     private readonly IExportPDF _exportPdf;
     private readonly IEmailGateway _emailGateway;
+    private readonly IUserRepository _userRepository;
     private static readonly ILog Logger = LogManager.GetLogger(typeof(DocumentsService));
 
     public DocumentsService(
         IDocumentRepository documentRepository,
         IExecutionContextAccessor executionContextAccessor,
         IExportPDF exportPdf,
-        IEmailGateway emailGateway
+        IEmailGateway emailGateway,
+        IUserRepository userRepository
     )
     {
         _documentRepository = documentRepository;
         _executionContextAccessor = executionContextAccessor;
         _exportPdf = exportPdf;
         _emailGateway = emailGateway;
+        _userRepository = userRepository;
     }
 
     public void ExportAsPdf(Guid docId)
@@ -38,7 +41,7 @@ public class DocumentsService
     public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
         var draftStatus = new Status {Code = AvailableStatuses.DRAFT.ToString()};
-        var user = new UserRepository().GetById(_executionContextAccessor.UserId);
+        var user = _userRepository.GetById(_executionContextAccessor.UserId);
         var document = new Document
         {
             Id = Guid.NewGuid(),

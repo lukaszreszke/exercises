@@ -1,6 +1,6 @@
 namespace Tests.Documents;
 
-public class InMemoryUsersRepository
+public class InMemoryUsersRepository : IUserRepository
 {
     private List<User> _users = new List<User>();
 

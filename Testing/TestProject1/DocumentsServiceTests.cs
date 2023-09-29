@@ -12,12 +12,12 @@ public class DocumentsServiceTests
         var usersRepository = new InMemoryUsersRepository();
         var contextAccessorMock = new Mock<IExecutionContextAccessor>();
         var emailGatewayMock = new Mock<IEmailGateway>();
-        usersRepository.Save(new User(Guid.NewGuid()){ Email = "tests@possible.com"});
         var documentsService = new DocumentsService(
             documentsRepository,
             contextAccessorMock.Object,
             null,
-            emailGatewayMock.Object);
+            emailGatewayMock.Object,
+            usersRepository);
 
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
