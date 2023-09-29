@@ -21,6 +21,7 @@ public class DocumentsServiceTests
             null,
             emailGatewayMock.Object,
             usersRepository,
+            null,
             null);
 
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
@@ -52,6 +53,7 @@ public class DocumentsServiceTests
             null,
             emailGatewayMock.Object,
             usersRepository,
+            null,
             null);
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
