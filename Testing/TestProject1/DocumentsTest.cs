@@ -24,13 +24,22 @@ public class DocumentsTest
     [Fact]
     public void publish_verified_document()
     {
+        var document = new Document();
+        document.Verify();
+
+        document.Publish();
         
+        Assert.Equal("PUBLISHED", document.Status.Code); 
     }
 
     [Fact]
     public void cannot_publish_non_verified_document()
     {
+        var document = new Document();
+
+        Assert.Throws<CannotPublishUnverifiedDocument>(() => document.Publish());
         
+        Assert.Equal("DRAFT", document.Status.Code);  
     }
 
     [Fact]
