@@ -12,5 +12,10 @@
         public List<User> Readers { get; set; } = new List<User>();
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public Document()
+        {
+            Status = new Status { Code = AvailableStatuses.DRAFT.ToString() };
+        }
     }
 }
