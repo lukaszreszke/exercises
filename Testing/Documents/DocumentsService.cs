@@ -73,7 +73,6 @@ public class DocumentsService
         _emailGateway.SendEmail(document.User.Email,
             $"Document {document.Title} has been verified by {_executionContextAccessor.UserId}");
         _documentRepository.Save(document);
-        MessageBus.Publish(new DocumentVerified(document.Id));
     }
 
     public void AssignReader(Guid docId, Guid readerId)
