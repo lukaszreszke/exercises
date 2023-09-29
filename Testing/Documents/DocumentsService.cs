@@ -11,6 +11,7 @@ public class DocumentsService
     private readonly IExportPDF _exportPdf;
     private readonly IEmailGateway _emailGateway;
     private readonly IUserRepository _userRepository;
+    private readonly IConfiguration _configuration;
     private static readonly ILog Logger = LogManager.GetLogger(typeof(DocumentsService));
 
     public DocumentsService(
@@ -18,7 +19,8 @@ public class DocumentsService
         IExecutionContextAccessor executionContextAccessor,
         IExportPDF exportPdf,
         IEmailGateway emailGateway,
-        IUserRepository userRepository
+        IUserRepository userRepository,
+        IConfiguration configuration
     )
     {
         _documentRepository = documentRepository;
@@ -26,6 +28,7 @@ public class DocumentsService
         _exportPdf = exportPdf;
         _emailGateway = emailGateway;
         _userRepository = userRepository;
+        _configuration = configuration;
     }
 
     public void ExportAsPdf(Guid docId)
@@ -152,6 +155,20 @@ public class DocumentsService
 
         document.Status = new Status() { Code = AvailableStatuses.ARCHIVED.ToString() };
         _documentRepository.Save(document);
+    }
+}
+
+public interface IConfiguration
+{
+    TimeOnly GetPreferredEmailReceivalTimeFor(User reader);
+}
+
+public class PreferredTimeConfiguration : IConfiguration
+{
+    public TimeOnly GetPreferredEmailReceivalTimeFor(User reader)
+    {
+        // TODO: IN prod ;)
+        throw new NotImplementedException();
     }
 }
 
