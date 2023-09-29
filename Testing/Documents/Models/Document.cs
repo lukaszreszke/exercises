@@ -17,5 +17,15 @@
         {
             Status = new Status { Code = AvailableStatuses.DRAFT.ToString() };
         }
+
+        public void Verify()
+        {
+            if (Status.Code != AvailableStatuses.DRAFT.ToString())
+            {
+                throw new CannotVerifyPublishedDocument();
+            }
+            
+            Status = new Status { Code = AvailableStatuses.VERIFIED.ToString() };
+        }
     }
 }
