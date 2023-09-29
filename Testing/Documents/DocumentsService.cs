@@ -40,12 +40,10 @@ public class DocumentsService
     
     public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
-        var draftStatus = new Status {Code = AvailableStatuses.DRAFT.ToString()};
         var user = _userRepository.GetById(_executionContextAccessor.UserId);
         var document = new Document
         {
             Id = Guid.NewGuid(),
-            Status = draftStatus,
             DocumentType = documentType,
             User = user,
             Title = title,
