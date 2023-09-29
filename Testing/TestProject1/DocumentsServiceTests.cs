@@ -80,13 +80,15 @@ public class DocumentsServiceTests
         contextAccessorMock.Setup(x => x.UserId).Returns(user.Id);
         var time = TimeOnly.Parse("10:00");
         configuration.Setup(x => x.GetPreferredEmailReceivalTimeFor(user)).Returns(time);
+        var printerFacade = new Mock<IPrinterFacade>();
         var documentsService = new DocumentsService(
             documentsRepository,
             contextAccessorMock.Object,
             null,
             emailGatewayMock.Object,
             usersRepository,
-            configuration.Object);
+            configuration.Object,
+            printerFacade.Object);
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
         documentsService.VerifyDocument(documentId);
