@@ -104,9 +104,10 @@ public class DocumentsService
         {
             throw new CannotPublishUnverifiedDocument();
         }
-        document.Status = new Status() {Code = AvailableStatuses.PUBLISHED.ToString()};
+
+        document.Status = new Status() { Code = AvailableStatuses.PUBLISHED.ToString() };
         _documentRepository.Save(document);
-        
+
         PrintDocument(document);
         SendEmails(document);
 
@@ -149,7 +150,7 @@ public class DocumentsService
     {
         Document document = _documentRepository.GetById(docId);
 
-        document.Status = new Status() {Code = AvailableStatuses.ARCHIVED.ToString()};
+        document.Status = new Status() { Code = AvailableStatuses.ARCHIVED.ToString() };
         _documentRepository.Save(document);
     }
 }
