@@ -69,6 +69,7 @@ public class DocumentsServiceTests
         var usersRepository = new InMemoryUsersRepository();
         var contextAccessorMock = new Mock<IExecutionContextAccessor>();
         var emailGatewayMock = new Mock<IEmailGateway>();
+        var documentsHttpClient = new Mock<IDocumentsHttpClient>();
         var user = new User(Guid.NewGuid()) { Email = "tests@possible.com" };
         usersRepository.Save(user);
         contextAccessorMock.Setup(x => x.UserId).Returns(user.Id);
@@ -82,7 +83,7 @@ public class DocumentsServiceTests
             "Are Cool And Possible To Do In Your Code. Check How.");
         documentsService.VerifyDocument(documentId);
  
-        documentsService.PublishDocument(documentId);
+        documentsService.PublishDocument(documentId, documentsHttpClient.Object);
 
         var result = documentsRepository.GetById(documentId);
         Assert.Equal("PUBLISHED", result.Status.Code);
