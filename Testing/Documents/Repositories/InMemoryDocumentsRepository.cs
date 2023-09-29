@@ -1,6 +1,6 @@
 namespace Tests.Documents;
 
-public class InMemoryDocumentRepository
+public class InMemoryDocumentRepository : IDocumentRepository
 {
     private List<Document> _documents = new List<Document>();
 
