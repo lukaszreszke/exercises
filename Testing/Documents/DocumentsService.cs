@@ -37,7 +37,7 @@ public class DocumentsService
         document.PdfAccessLink = pdfAccessLink;
         document.PdfVersion = _exportPdf.GetExportVersion();
     }
-    
+
     public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
         var user = _userRepository.GetById(_executionContextAccessor.UserId);
@@ -62,12 +62,8 @@ public class DocumentsService
     {
         Document document = _documentRepository.GetById(docId);
 
-        if (document.Status.Code != AvailableStatuses.DRAFT.ToString())
-        {
-            throw new CannotVerifyPublishedDocument();
-        }
+        document.Verify();
 
-        document.Status = new Status() { Code = AvailableStatuses.VERIFIED.ToString() };
         _emailGateway.SendEmail(document.User.Email,
             $"Document {document.Title} has been verified by {_executionContextAccessor.UserId}");
         _documentRepository.Save(document);
@@ -81,7 +77,7 @@ public class DocumentsService
         {
             throw new UnpublishedDocumentCannotBeShared();
         }
-            
+
         if (document.User.Id == _executionContextAccessor.UserId)
         {
             var readerUser = new UserRepository().GetById(readerId);
