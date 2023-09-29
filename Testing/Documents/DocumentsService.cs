@@ -15,13 +15,14 @@ public class DocumentsService
     public DocumentsService(
         IDocumentRepository documentRepository,
         IExecutionContextAccessor executionContextAccessor,
-        IExportPDF exportPdf
+        IExportPDF exportPdf,
+        IEmailGateway emailGateway
     )
     {
         _documentRepository = documentRepository;
         _executionContextAccessor = executionContextAccessor;
         _exportPdf = exportPdf;
-        _emailGateway = new EmailGateway();
+        _emailGateway = emailGateway;
     }
 
     public void ExportAsPdf(Guid docId)
