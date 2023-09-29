@@ -97,7 +97,7 @@ public class DocumentsService
         /* TODO: To be implemented */
     }
 
-    public async Task PublishDocument(Guid docId, HttpClient httpClient)
+    public async Task PublishDocument(Guid docId, IDocumentsHttpClient httpClient)
     {
         Document document = _documentRepository.GetById(docId);
         if (document.Status.Code != AvailableStatuses.VERIFIED.ToString())
@@ -113,7 +113,7 @@ public class DocumentsService
 
         try
         {
-            await httpClient.PostAsJsonAsync("api/DocumentsArchive/publish", document);
+            await httpClient.PublishDocument(document);
         }
         catch (Exception e)
         {
@@ -152,5 +152,19 @@ public class DocumentsService
 
         document.Status = new Status() { Code = AvailableStatuses.ARCHIVED.ToString() };
         _documentRepository.Save(document);
+    }
+}
+
+public interface IDocumentsHttpClient
+{
+    Task PublishDocument(Document document);
+}
+
+public class DocumentsHttpClient : IDocumentsHttpClient
+{
+    public async Task PublishDocument(Document document)
+    {
+        var httpClient = new HttpClient();
+        await httpClient.PostAsJsonAsync("api/DocumentsArchive/publish", document);
     }
 }
