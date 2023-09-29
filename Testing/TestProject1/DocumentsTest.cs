@@ -17,7 +17,7 @@ public class DocumentsTest
         var document = new Document();
 
         document.Verify();
-        
+
         Assert.Equal("VERIFIED", document.Status.Code);
     }
 
@@ -28,8 +28,8 @@ public class DocumentsTest
         document.Verify();
 
         document.Publish();
-        
-        Assert.Equal("PUBLISHED", document.Status.Code); 
+
+        Assert.Equal("PUBLISHED", document.Status.Code);
     }
 
     [Fact]
@@ -38,8 +38,8 @@ public class DocumentsTest
         var document = new Document();
 
         Assert.Throws<CannotPublishUnverifiedDocument>(() => document.Publish());
-        
-        Assert.Equal("DRAFT", document.Status.Code);  
+
+        Assert.Equal("DRAFT", document.Status.Code);
     }
 
     [Fact]

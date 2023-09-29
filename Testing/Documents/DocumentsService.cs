@@ -106,12 +106,7 @@ public class DocumentsService
     public async Task PublishDocument(Guid docId, IDocumentsHttpClient httpClient)
     {
         Document document = _documentRepository.GetById(docId);
-        if (document.Status.Code != AvailableStatuses.VERIFIED.ToString())
-        {
-            throw new CannotPublishUnverifiedDocument();
-        }
-
-        document.Status = new Status() { Code = AvailableStatuses.PUBLISHED.ToString() };
+        document.Publish();
         _documentRepository.Save(document);
 
         PrintDocument(document);
