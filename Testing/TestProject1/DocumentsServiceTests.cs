@@ -72,15 +72,19 @@ public class DocumentsServiceTests
         var contextAccessorMock = new Mock<IExecutionContextAccessor>();
         var emailGatewayMock = new Mock<IEmailGateway>();
         var documentsHttpClient = new Mock<IDocumentsHttpClient>();
+        var configuration = new Mock<IConfiguration>();
         var user = new User(Guid.NewGuid()) { Email = "tests@possible.com" };
         usersRepository.Save(user);
         contextAccessorMock.Setup(x => x.UserId).Returns(user.Id);
+        var time = TimeOnly.Parse("10:00");
+        configuration.Setup(x => x.GetPreferredEmailReceivalTimeFor(user)).Returns(time);
         var documentsService = new DocumentsService(
             documentsRepository,
             contextAccessorMock.Object,
             null,
             emailGatewayMock.Object,
-            usersRepository);
+            usersRepository,
+            configuration.Object);
         var documentId = documentsService.CreateDocument(DocumentType.MANUAL, "Tests",
             "Are Cool And Possible To Do In Your Code. Check How.");
         documentsService.VerifyDocument(documentId);
@@ -89,7 +93,7 @@ public class DocumentsServiceTests
 
         var result = documentsRepository.GetById(documentId);
         Assert.Equal("PUBLISHED", result.Status.Code);
-        emailGatewayMock.Verify(x => x.SendEmail(user.Email, 
+        emailGatewayMock.Verify(x => x.ScheduleEmail(user.Email, 
             "Document Tests is printed and waits for you in the office." +
             "You have to come and get it personally." +
             "Your manager," +
