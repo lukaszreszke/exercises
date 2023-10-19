@@ -28,7 +28,7 @@ namespace Grades
             {
                 FullName = g.FullName,
                 Course = g.Subject,
-                Grade = ConvertEvaluationToGrade(g.Evaluation) // Transformacja z stringa na ocenę
+                Grade = ConvertEvaluationToGrade(g.Evaluation)
             }));
 
             return allGrades;
