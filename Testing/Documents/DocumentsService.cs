@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using log4net;
 
 namespace Tests.Documents;
 
@@ -10,7 +9,6 @@ public class DocumentsService
     private readonly IExecutionContextAccessor _executionContextAccessor;
     private readonly IExportPDF _exportPdf;
     private readonly IEmailGateway _emailGateway;
-    private static readonly ILog Logger = LogManager.GetLogger(typeof(DocumentsService));
 
     public DocumentsService(
         IDocumentRepository documentRepository,
@@ -53,8 +51,6 @@ public class DocumentsService
         _emailGateway.SendEmail(user.Email, document.AccessLink);
         _documentRepository.Save(document);
 
-        MessageBus.Publish(new DocumentCreated(document.Id));
-
         return document.Id;
     }
 
@@ -71,7 +67,6 @@ public class DocumentsService
         _emailGateway.SendEmail(document.User.Email,
             $"Document {document.Title} has been verified by {_executionContextAccessor.UserId}");
         _documentRepository.Save(document);
-        MessageBus.Publish(new DocumentVerified(document.Id));
     }
 
     public void AssignReader(Guid docId, Guid readerId)
@@ -91,7 +86,6 @@ public class DocumentsService
                 document.Readers.Add(readerUser);
                 _emailGateway.SendEmail(readerUser.Email,
                     $"Document {document.Title} has been shared with you by {_executionContextAccessor.UserId}");
-                MessageBus.Publish(new ReaderAssignedToDocument(document.Id));
                 _documentRepository.Save(document);
             }
         }
@@ -121,7 +115,6 @@ public class DocumentsService
         }
         catch (Exception e)
         {
-            Logger.Error("Failed to publish document into Documents Archive", e);
             throw e;
         }
     }
