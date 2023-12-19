@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheDocument", "TheDocument\TheDocument.csproj", "{44B1B591-9BCD-4934-8194-A0B544C50D4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaimObjectMother", "ClaimObjectMother\ClaimObjectMother.csproj", "{B0973C8A-E407-4966-BF4B-15EFF5FEF0EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaimObjectMotherTests", "ClaimObjectMotherTests\ClaimObjectMotherTests.csproj", "{32F7FCDE-763B-4061-B8F2-CCE7BF784A81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{44B1B591-9BCD-4934-8194-A0B544C50D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44B1B591-9BCD-4934-8194-A0B544C50D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44B1B591-9BCD-4934-8194-A0B544C50D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0973C8A-E407-4966-BF4B-15EFF5FEF0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0973C8A-E407-4966-BF4B-15EFF5FEF0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0973C8A-E407-4966-BF4B-15EFF5FEF0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0973C8A-E407-4966-BF4B-15EFF5FEF0EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32F7FCDE-763B-4061-B8F2-CCE7BF784A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32F7FCDE-763B-4061-B8F2-CCE7BF784A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32F7FCDE-763B-4061-B8F2-CCE7BF784A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32F7FCDE-763B-4061-B8F2-CCE7BF784A81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
