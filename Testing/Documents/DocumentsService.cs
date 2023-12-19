@@ -7,31 +7,15 @@ public class DocumentsService
     private const string ROOT_URL = "https://example.com/documents/";
     private readonly IDocumentRepository _documentRepository;
     private readonly IExecutionContextAccessor _executionContextAccessor;
-    private readonly IExportPDF _exportPdf;
-    private readonly IEmailGateway _emailGateway;
 
     public DocumentsService(
         IDocumentRepository documentRepository,
-        IExecutionContextAccessor executionContextAccessor,
-        IExportPDF exportPdf
+        IExecutionContextAccessor executionContextAccessor
     )
     {
         _documentRepository = documentRepository;
         _executionContextAccessor = executionContextAccessor;
-        _exportPdf = exportPdf;
-        _emailGateway = new EmailGateway();
     }
-
-    public void ExportAsPdf(Guid docId)
-    {
-        var document = _documentRepository.GetById(docId);
-
-        var pdfAccessLink = _exportPdf.Export(document);
-
-        document.PdfAccessLink = pdfAccessLink;
-        document.PdfVersion = _exportPdf.GetExportVersion();
-    }
-    
     public Guid CreateDocument(DocumentType documentType, string title, string content)
     {
         var draftStatus = new Status {Code = AvailableStatuses.DRAFT.ToString()};
@@ -48,7 +32,6 @@ public class DocumentsService
         };
 
         document.AccessLink = new Uri($"{document.AccessLink}/{user.Id}/{document.Title}");
-        _emailGateway.SendEmail(user.Email, document.AccessLink);
         _documentRepository.Save(document);
 
         return document.Id;
@@ -64,8 +47,6 @@ public class DocumentsService
         }
 
         document.Status = new Status() { Code = AvailableStatuses.VERIFIED.ToString() };
-        _emailGateway.SendEmail(document.User.Email,
-            $"Document {document.Title} has been verified by {_executionContextAccessor.UserId}");
         _documentRepository.Save(document);
     }
 
@@ -84,16 +65,9 @@ public class DocumentsService
             if (!document.Readers.Contains(readerUser))
             {
                 document.Readers.Add(readerUser);
-                _emailGateway.SendEmail(readerUser.Email,
-                    $"Document {document.Title} has been shared with you by {_executionContextAccessor.UserId}");
                 _documentRepository.Save(document);
             }
         }
-    }
-
-    public async Task ResendDocument(Guid docId)
-    {
-        /* TODO: To be implemented */
     }
 
     public async Task PublishDocument(Guid docId, HttpClient httpClient)
@@ -106,9 +80,6 @@ public class DocumentsService
         document.Status = new Status() {Code = AvailableStatuses.PUBLISHED.ToString()};
         _documentRepository.Save(document);
         
-        PrintDocument(document);
-        SendEmails(document);
-
         try
         {
             await httpClient.PostAsJsonAsync("api/DocumentsArchive/publish", document);
@@ -118,31 +89,7 @@ public class DocumentsService
             throw e;
         }
     }
-
-    private void SendEmails(Document document)
-    {
-        foreach (var reader in document.Readers.Concat(new List<User> { document.User }))
-        {
-            var time = Configuration.GetPreferredEmailReceivalTimeFor(reader);
-            _emailGateway.ScheduleEmail(reader.Email,
-                $"Document {document.Title} is printed and waits for you in the office." +
-                $"You have to come and get it personally." +
-                $"Your manager," +
-                $"Control Desire", time);
-            document.Readers.Remove(reader);
-            _documentRepository.Save(document);
-        }
-    }
-
-    private static void PrintDocument(Document document)
-    {
-        PrinterFacade printerFacade = new PrinterFacade();
-        for (int i = 0; i < document.Readers.Count + 1; i++) // readers + owner
-        {
-            printerFacade.Print(document);
-        }
-    }
-
+    
     public void ArchiveDocument(Guid docId)
     {
         Document document = _documentRepository.GetById(docId);
