@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformation", "Transformation\Transformation.csproj", "{9A8ACED4-8728-41A2-8A0B-EDF04B49CFD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightReservationAssertObject", "FlightReservationAssertObject\FlightReservationAssertObject.csproj", "{EB6771DA-3A9C-4B37-A468-11A90D402734}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightReservationAssertObjectTests", "FlightReservationAssertObjectTests\FlightReservationAssertObjectTests.csproj", "{3D566BE3-E37F-450B-B281-653442208630}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{9A8ACED4-8728-41A2-8A0B-EDF04B49CFD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A8ACED4-8728-41A2-8A0B-EDF04B49CFD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A8ACED4-8728-41A2-8A0B-EDF04B49CFD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB6771DA-3A9C-4B37-A468-11A90D402734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB6771DA-3A9C-4B37-A468-11A90D402734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB6771DA-3A9C-4B37-A468-11A90D402734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB6771DA-3A9C-4B37-A468-11A90D402734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D566BE3-E37F-450B-B281-653442208630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D566BE3-E37F-450B-B281-653442208630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D566BE3-E37F-450B-B281-653442208630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D566BE3-E37F-450B-B281-653442208630}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
