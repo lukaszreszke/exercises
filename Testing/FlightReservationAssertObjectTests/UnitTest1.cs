@@ -1,5 +1,6 @@
 using System;
 using FlightReservationAssertObject;
+using FlightReservationAssertObjectTests;
 using Xunit;
 
 public class FlightReservationTests
@@ -8,12 +9,13 @@ public class FlightReservationTests
     public void given_unconfirmed_reservation_when_confirmation_requested_and_departure_in_future_then_confirm_reservation()
     {
         // Arrange
+        var departureTime = DateTime.Now.AddDays(7);
         var reservation = new FlightReservation
         {
             ReservationId = 1,
             PassengerName = "John Doe",
             FlightNumber = "ABC123",
-            DepartureTime = DateTime.Now.AddDays(7),
+            DepartureTime = departureTime,
         };
 
         // Act
@@ -21,6 +23,7 @@ public class FlightReservationTests
 
         // Assert
         Assert.True(reservation.IsConfirmed);
+        reservation.AssertFlightReservation(1, "John Doe", "ABC123", departureTime, true);
     }
 
     [Fact]
