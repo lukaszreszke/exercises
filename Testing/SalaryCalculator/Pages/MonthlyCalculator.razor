@@ -1,0 +1,42 @@
+@page "/MonthlyCalculator"
+@using global::Calculator
+<PageTitle>Monthly Salary calculator</PageTitle>
+
+<EditForm Model="Model" OnSubmit="Submit">
+    <div class="d-flex flex-column m-auto">
+        <div class="p-2">
+            <label>
+                Period:
+                <InputText @bind-Value="Model.Period"></InputText>
+            </label>
+        </div>
+        <div class="p-2">
+            <label>
+                Amount:
+                <InputNumber @bind-Value="Model.BaseAmount"></InputNumber>
+            </label>
+        </div>
+        <div class="p-2 mt-3">
+            <button type="submit">Show me the result!</button>
+        </div>
+    </div>
+</EditForm>
+
+<h1 class="mt-5">The result is: @Model.Result</h1>
+
+@code {
+    private SalaryFormObject Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Model = new();
+    }
+
+    private void Submit()
+    {
+        var formula = new DefaultMonthlyFormulaForSalary();
+        Model.Result = formula.Calculate(Model.Period, Model.BaseAmount);
+    }
+
+}
