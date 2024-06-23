@@ -6,16 +6,41 @@ using System.Text;
 
 public class CarRentalManager
 {
-    public List<string> Cars = new List<string>();
-    public List<DateTime> RentalStartDates = new List<DateTime>();
-    public List<int> RentalDurations = new List<int>();
-    public List<string> Customers = new List<string>();
-    public List<string> CustomerEmails = new List<string>();
-    public List<double> RentalCharges = new List<double>();
+    private List<Reservation> Reservations = new();
+    public List<int> CarIds => Reservations.ConvertAll(reservation => reservation.CarId);
 
-    public void RentCar(string carModel, string customer, string email, int rentalDays)
+    public int RentCar(int carModel, string customer, string email, int rentalDays, DateTime rentSince = default)
     {
-        if (string.IsNullOrEmpty(carModel) || string.IsNullOrEmpty(customer) || string.IsNullOrEmpty(email))
+        if (rentSince == default)
+        {
+            rentSince = DateTime.Now;
+        }
+        
+        ValidateInput(customer, email, rentalDays);
+        ValidateReservation(carModel, rentSince);
+        return AddReservation(carModel, customer, email, rentalDays, rentSince);
+    }
+
+    private void ValidateReservation(int carModel, DateTime rentSince)
+    {
+        if (Reservations.Any(r => r.CarId == carModel && (r.RentalStartDate.Date == rentSince.Date ||
+                                                          r.RentalStartDate.Date.AddDays(r.RentalDurationDays) >
+                                                          rentSince.Date)))
+        {
+            throw new ArgumentException("Car is already rented for the given date.");
+        }
+    }
+
+    private int AddReservation(int carModel, string customer, string email, int rentalDays, DateTime rentSince)
+    {
+        var nextId = Reservations.Any() ? Reservations.Select(x => x.Id).Max() + 1 : 1;
+        Reservations.Add(new Reservation(nextId, carModel, rentSince, rentalDays, customer, email, rentalDays * 100));
+        return nextId;
+    }
+
+    private static void ValidateInput(string customer, string email, int rentalDays)
+    {
+        if (string.IsNullOrEmpty(customer) || string.IsNullOrEmpty(email))
         {
             throw new ArgumentException("Car model, customer, and email cannot be null or empty.");
         }
@@ -29,37 +54,27 @@ public class CarRentalManager
         {
             throw new ArgumentException("Invalid email address.");
         }
-
-        Cars.Add(carModel);
-        RentalStartDates.Add(DateTime.Now);
-        RentalDurations.Add(rentalDays);
-        Customers.Add(customer);
-        CustomerEmails.Add(email);
-        RentalCharges.Add(100 * rentalDays); // Initial charge is zero
     }
 
-    public void ReturnCar(string carModel)
+    public void ReturnCar(int reservationId)
     {
-        for (int i = 0; i < Cars.Count; i++)
-        {
-            if (Cars[i] == carModel)
-            {
-                DateTime dueDate = RentalStartDates[i].AddDays(RentalDurations[i]);
-                if (DateTime.Now > dueDate)
-                {
-                    TimeSpan lateDuration = DateTime.Now - dueDate;
-                    double lateCharge = lateDuration.Days * 20;
-                    RentalCharges[i] += lateCharge;
-                }
+        HandleDueDate(reservationId);
+        RemoveReservation(reservationId);
+    }
 
-                Cars.RemoveAt(i);
-                RentalStartDates.RemoveAt(i);
-                RentalDurations.RemoveAt(i);
-                Customers.RemoveAt(i);
-                CustomerEmails.RemoveAt(i);
-                RentalCharges.RemoveAt(i);
-                break;
-            }
+    private void RemoveReservation(int carId)
+    {
+        Reservations.Remove(Reservations.Find(i => i.CarId == carId));
+    }
+
+    private void HandleDueDate(int carId)
+    {
+        DateTime dueDate = Reservations.Find(i => i.CarId == carId).RentalStartDate.AddDays(Reservations.Find(i => i.CarId == carId).RentalDurationDays); 
+        if (DateTime.Now > dueDate)
+        {
+            TimeSpan lateDuration = DateTime.Now - dueDate;
+            double lateCharge = lateDuration.Days * 20;
+            Reservations.Find(i => i.CarId == carId).RentalCharge += lateCharge;
         }
     }
 
@@ -68,14 +83,15 @@ public class CarRentalManager
         double totalCharge = 0;
         StringBuilder result = new StringBuilder($"Rental Record for {customer}\n");
 
-        for (int i = 0; i < Customers.Count; i++)
+        Reservations.ForEach(reservation =>
         {
-            if (Customers[i] == customer)
+            if (reservation.CustomerName == customer)
             {
-                result.Append($"\tCar: {Cars[i]}, Due Date: {RentalStartDates[i].AddDays(RentalDurations[i])}, Charge: {RentalCharges[i]}\n");
-                totalCharge += RentalCharges[i];
+                result.Append(
+                    $"\tCar: {reservation.CarId}, Due Date: {reservation.RentalStartDate.AddDays(reservation.RentalDurationDays)}, Charge: {reservation.RentalCharge}\n");
+                totalCharge += reservation.RentalCharge;
             }
-        }
+        });
 
         result.Append($"Total charge: {totalCharge}\n");
         return result.ToString();
@@ -83,16 +99,44 @@ public class CarRentalManager
 
     public void NotifyOverdueRentals()
     {
-        for (int i = 0; i < Cars.Count; i++)
+        Reservations.ForEach(reservation =>
         {
-            DateTime dueDate = RentalStartDates[i].AddDays(RentalDurations[i]);
+            DateTime dueDate = reservation.RentalStartDate.AddDays(reservation.RentalDurationDays);
             if (DateTime.Now > dueDate)
             {
-                Console.WriteLine($"Sending overdue notice for car {Cars[i]} to {CustomerEmails[i]}");
+                Console.WriteLine($"Sending overdue notice for car {reservation.CarId} to {reservation.CustomerEmail}");
             }
-        }
+        });
+    }
+    
+    public List<Car> GetAvailableCars()
+    {
+        return new List<Car>
+        {
+            new(2000, "Model S", "Tesla", 200),
+            new(3000, "Model 3", "Tesla", 300),
+            new(1000, "Model X", "Tesla", 100),
+            new(4000, "Model Y", "Tesla", 400),
+        };
     }
 }
+
+public class Car
+{
+    public Car(int id, string model, string brand, double dailyRate)
+    {
+        Id = id;
+        Model = model;
+        Brand = brand;
+        DailyRate = dailyRate;
+    }
+
+    public int Id { get; }
+    public string Model { get; }
+    public string Brand { get; }
+    public double DailyRate { get; }
+}
+
 
 public class Clock : IClock
 {
