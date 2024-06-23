@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.CarRental", "Acme.CarR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.CarRentalTests", "Acme.CarRentalTests\Acme.CarRentalTests.csproj", "{B56A7971-0566-4FEC-8A49-AAD90DA3842D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.CarRentalStep1Tests", "Acme.CarRentalStep1Tests\Acme.CarRentalStep1Tests.csproj", "{93B642E6-74DC-457D-8012-ACAAB8266C82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{B56A7971-0566-4FEC-8A49-AAD90DA3842D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B56A7971-0566-4FEC-8A49-AAD90DA3842D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B56A7971-0566-4FEC-8A49-AAD90DA3842D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B642E6-74DC-457D-8012-ACAAB8266C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B642E6-74DC-457D-8012-ACAAB8266C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B642E6-74DC-457D-8012-ACAAB8266C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B642E6-74DC-457D-8012-ACAAB8266C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
