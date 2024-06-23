@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Builder", "Acme.Builder\Acme.Builder.csproj", "{C9B52D0E-7CD9-418A-982E-AAFED57F23AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.BuilderTests", "Acme.BuilderTests\Acme.BuilderTests.csproj", "{B6195305-866B-40D5-9485-0E4244F374E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9B52D0E-7CD9-418A-982E-AAFED57F23AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9B52D0E-7CD9-418A-982E-AAFED57F23AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9B52D0E-7CD9-418A-982E-AAFED57F23AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9B52D0E-7CD9-418A-982E-AAFED57F23AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6195305-866B-40D5-9485-0E4244F374E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6195305-866B-40D5-9485-0E4244F374E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6195305-866B-40D5-9485-0E4244F374E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6195305-866B-40D5-9485-0E4244F374E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
