@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.TemplateMethodTests", "Acme.TemplateMethodTests\Acme.TemplateMethodTests.csproj", "{F331E272-B0D5-44D0-8D94-A89BB5EBD222}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.TemplateMethod", "Acme.TemplateMethod\Acme.TemplateMethod.csproj", "{D5E119A6-E5ED-47DB-93A7-34E83EBF8CD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F331E272-B0D5-44D0-8D94-A89BB5EBD222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F331E272-B0D5-44D0-8D94-A89BB5EBD222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F331E272-B0D5-44D0-8D94-A89BB5EBD222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F331E272-B0D5-44D0-8D94-A89BB5EBD222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E119A6-E5ED-47DB-93A7-34E83EBF8CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E119A6-E5ED-47DB-93A7-34E83EBF8CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E119A6-E5ED-47DB-93A7-34E83EBF8CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E119A6-E5ED-47DB-93A7-34E83EBF8CD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
