@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Salaries.Controllers;
 using Salaries.Domain;
+using Salaries.Infra;
 
 namespace SalariesTests
 {
@@ -117,6 +118,12 @@ namespace SalariesTests
             Assert.True(_factory.GetSalariesContext().Employees.ToList().Count == 1);
         }
 
+        public void WithSalariesContext(Action<SalariesContext> action)
+        {
+            using var context = _factory.GetSalariesContext();
+            action(context);
+            context.SaveChanges();
+        }
         public Task InitializeAsync() => Task.CompletedTask;
         public Task DisposeAsync() => _resetDatabase();
     }
