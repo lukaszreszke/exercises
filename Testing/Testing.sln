@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.State", "Acme.State\Acme.State.csproj", "{E9BBD153-C8FB-4D9F-B715-30BCB80D265C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.StateTesting", "Acme.StateTesting\Acme.StateTesting.csproj", "{5A00D431-A736-4BE6-BB83-4BFEE0917069}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9BBD153-C8FB-4D9F-B715-30BCB80D265C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9BBD153-C8FB-4D9F-B715-30BCB80D265C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9BBD153-C8FB-4D9F-B715-30BCB80D265C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9BBD153-C8FB-4D9F-B715-30BCB80D265C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A00D431-A736-4BE6-BB83-4BFEE0917069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A00D431-A736-4BE6-BB83-4BFEE0917069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A00D431-A736-4BE6-BB83-4BFEE0917069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A00D431-A736-4BE6-BB83-4BFEE0917069}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

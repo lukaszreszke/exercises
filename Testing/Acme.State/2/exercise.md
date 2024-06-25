@@ -1,0 +1,1 @@
+Refactor the Door class to use your favorite version of the state pattern.
