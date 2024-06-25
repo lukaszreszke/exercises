@@ -3,38 +3,38 @@ public class LoanProcessor
     private readonly ILoanAmountCalculator _loanAmountCalculator;
     private readonly IDebtVerificationService _debtVerificationService;
     private readonly ILoanDecision _decision;
+    private IApplicationRepository _applicationDataRepository;
 
     public LoanProcessor(ILoanAmountCalculator loanAmountCalculator, IDebtVerificationService debtVerificationService,
-        ILoanDecision decision)
+        ILoanDecision decision, IApplicationRepository applicationDataRepository)
     {
         _loanAmountCalculator = loanAmountCalculator;
         _debtVerificationService = debtVerificationService;
         _decision = decision;
+        _applicationDataRepository = applicationDataRepository;
     }
 
-    public void ProcessApplication(ApplicationData applicationData, decimal requestedLoanAmount)
+    public void ProcessApplication(int applicationId, decimal requestedLoanAmount)
     {
-        bool hasExistingDebts = _debtVerificationService.CheckExistingDebts(applicationData.Id);
+        bool hasExistingDebts = _debtVerificationService.CheckExistingDebts(applicationId);
+        ApplicationData applicationData = _applicationDataRepository.GetApplicationData(applicationId);
+        decimal maximumLoanAmount = _loanAmountCalculator.CalculateMaximumLoanAmount(applicationData);
 
         if (applicationData.Age >= 18 && applicationData.Income >= 2000 && applicationData.CreditScore >= 600 &&
-            !hasExistingDebts)
+            !hasExistingDebts && requestedLoanAmount < maximumLoanAmount)
         {
-            decimal maximumLoanAmount = _loanAmountCalculator.CalculateMaximumLoanAmount(applicationData);
-
-            if (requestedLoanAmount <= maximumLoanAmount)
-            {
                 _decision.Accept();
-            }
-            else
-            {
-                _decision.Reject();
-            }
         }
         else
         {
             _decision.Reject();
         }
     }
+}
+
+public interface IApplicationRepository
+{
+    ApplicationData GetApplicationData(int applicationId);
 }
 
 public interface ILoanDecision

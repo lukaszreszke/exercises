@@ -12,9 +12,11 @@ public class LoanProcessorTest
         var debtVerificationService = new Mock<IDebtVerificationService>();
         debtVerificationService.Setup(x => x.CheckExistingDebts(applicationData.Id)).Returns(false);
         var loanDecision = new Mock<ILoanDecision>();
+        var applicationRepository = new Mock<IApplicationRepository>();
+        applicationRepository.Setup(x => x.GetApplicationData(applicationData.Id)).Returns(applicationData);
 
-        var sut = new LoanProcessor(loanAmountCalculator.Object, debtVerificationService.Object, loanDecision.Object);
-        sut.ProcessApplication(applicationData, 10000);
+        var sut = new LoanProcessor(loanAmountCalculator.Object, debtVerificationService.Object, loanDecision.Object, applicationRepository.Object);
+        sut.ProcessApplication(3, 10000);
 
         loanDecision.Verify(x => x.Accept(), Times.Once);
         loanDecision.VerifyNoOtherCalls();
